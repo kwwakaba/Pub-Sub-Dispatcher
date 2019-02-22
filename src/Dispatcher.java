@@ -11,6 +11,8 @@ public class Dispatcher {
 	private int portNumber;
 	private LinkedList<Dispatcher> neighborTable;
 	private HashMap<String, LinkedList<Dispatcher>> subscriptionTable; //Should this be pattern -> List of distributors?
+
+	/** Event cache needs to be protected by a mutex, since multiple threads will be reading/writing to the cache.*/
 	private LinkedList<Event> eventCache;
 	
 	// MARK: - Constructor
@@ -65,6 +67,11 @@ public class Dispatcher {
 	
 	public LinkedList<Event> getEventCache() {
 		return eventCache;
+	}
+
+	public static void main(String [ ] args)
+	{
+		System.out.println("Starting Dispatcher.");
 	}
 	
 }
