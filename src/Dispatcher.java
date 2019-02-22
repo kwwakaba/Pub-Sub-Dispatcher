@@ -9,7 +9,7 @@ public class Dispatcher {
 	
 	private String identifier, ipAddress;
 	private int portNumber;
-	private LinkedList<Dispatcher> neighborTable;
+	private LinkedList<Dispatcher> neighborTable; //This probably makes more sense to implement as a set.
 	private HashMap<String, LinkedList<Dispatcher>> subscriptionTable; //Should this be pattern -> List of distributors?
 
 	/** Event cache needs to be protected by a mutex, since multiple threads will be reading/writing to the cache.*/
@@ -71,6 +71,7 @@ public class Dispatcher {
 
 	public static void main(String [ ] args)
 	{
+
 		System.out.println("Starting Dispatcher.");
 	}
 	

@@ -1,9 +1,11 @@
 package src;
 
 
+import java.io.Serializable;
+
 /** This should be in the messages folder but it was causing red lines sooooo here we are... */
 
-public abstract class Message {
+public abstract class Message implements Serializable {
 	
 	// MARK: - Instance Variable
 	
@@ -26,5 +28,10 @@ public abstract class Message {
 
 
 	public String getSourceNodeId() { return sourceNodeId; }
+
+	@Override
+	public String toString() {
+		return String.format("Message: description = " + description + " sourceNodeId = " + sourceNodeId);
+	}
 
 }

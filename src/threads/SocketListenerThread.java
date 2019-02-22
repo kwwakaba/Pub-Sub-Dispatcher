@@ -1,5 +1,9 @@
 package src.threads;
 
+import src.Message;
+
+import java.io.ByteArrayInputStream;
+import java.io.ObjectInputStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 
@@ -21,12 +25,20 @@ public class SocketListenerThread extends Thread {
             DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
             serverSocket.receive(receivePacket);
 
-            String sentence = new String(receivePacket.getData());
-            System.out.println("RECEIVED: " + sentence);
-            // End borrowed code.
+            //Try to parse the data received into a Message
+            byte[] data = receivePacket.getData();
+            ByteArrayInputStream in = new ByteArrayInputStream(data);
+            ObjectInputStream is = new ObjectInputStream(in);
+            Message message = null;
+            try {
+                message = (Message)is.readObject();
 
-            if (!sentence.isEmpty()) {
-                MessageParserThread messageParserThread = new MessageParserThread(receivePacket);
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+
+            if (message != null) {
+                MessageHandlerThread messageParserThread = new MessageHandlerThread(receivePacket, message);
                 messageParserThread.start();
             }
 

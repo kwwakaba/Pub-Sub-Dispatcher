@@ -2,6 +2,8 @@ package src.messages;
 
 import src.Event;
 import src.Message;
+
+import java.net.DatagramPacket;
 import java.util.List;
 
 /** Class for EventResponseMessage objects.
