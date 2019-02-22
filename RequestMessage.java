@@ -1,4 +1,9 @@
+package src.messages;
+
 import java.util.LinkedList;
+import src.Event;
+import src.Message;
+
 
 public class RequestMessage extends Message {
 	

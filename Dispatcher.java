@@ -1,3 +1,5 @@
+package src;
+
 import java.util.LinkedList;
 import java.util.HashMap;
 
@@ -8,7 +10,7 @@ public class Dispatcher {
 	private String identifier, ipAddress;
 	private int portNumber;
 	private LinkedList<Dispatcher> neighborTable;
-	private HashMap<String, LinkedList<Dispatcher>> subscriptionTable;
+	private HashMap<String, LinkedList<Dispatcher>> subscriptionTable; //Should this be pattern -> List of distributors?
 	private LinkedList<Event> eventCache;
 	
 	// MARK: - Constructor
