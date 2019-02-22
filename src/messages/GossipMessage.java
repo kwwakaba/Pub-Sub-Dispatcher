@@ -1,6 +1,5 @@
 package src.messages;
 import src.Digest;
-import src.Message;
 
 public class GossipMessage extends Message {
 	

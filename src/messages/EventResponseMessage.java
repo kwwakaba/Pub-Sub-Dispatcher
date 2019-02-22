@@ -1,7 +1,7 @@
 package src.messages;
 
 import src.Event;
-import src.Message;
+
 import java.util.List;
 
 /** Class for EventResponseMessage objects.

@@ -1,7 +1,12 @@
 package src;
 
+import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
 import java.util.LinkedList;
 import java.util.HashMap;
+import java.util.concurrent.TimeUnit;
 
 public class Dispatcher {
 	
@@ -69,9 +74,26 @@ public class Dispatcher {
 		return eventCache;
 	}
 
-	public static void main(String [ ] args)
-	{
-		System.out.println("Starting Dispatcher.");
+	public static void main(String [ ] args) throws IOException, InterruptedException {
+		// Launch listener thread
+		Listener listener = new Listener();
+		Thread listenerThread = new Thread(listener);
+		listenerThread.start();
+
+		// Client example
+		DatagramSocket ds = new DatagramSocket();
+		InetAddress ip = InetAddress.getLocalHost();
+
+		byte buff[] = null;
+		buff = "Hello World!".getBytes();
+		DatagramPacket dp0 = new DatagramPacket(buff, buff.length, ip, 8080);
+		ds.send(dp0);
+
+		buff = "bye".getBytes();
+		DatagramPacket dp1 = new DatagramPacket(buff, buff.length, ip, 8080);
+		ds.send(dp1);
+
+		ds.close();
 	}
 	
 }

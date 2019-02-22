@@ -1,4 +1,4 @@
-package src;
+package src.messages;
 
 
 /** This should be in the messages folder but it was causing red lines sooooo here we are... */
