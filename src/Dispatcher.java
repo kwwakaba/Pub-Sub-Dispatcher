@@ -1,5 +1,7 @@
 package src;
 
+import src.threads.SocketListenerThread;
+
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -75,9 +77,7 @@ public class Dispatcher {
 	}
 
 	public static void main(String [ ] args) throws IOException, InterruptedException {
-		// Launch listener thread
-		Listener listener = new Listener();
-		Thread listenerThread = new Thread(listener);
+		SocketListenerThread listenerThread = new SocketListenerThread();
 		listenerThread.start();
 
 		// Client example
