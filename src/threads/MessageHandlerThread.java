@@ -1,11 +1,15 @@
 package src.threads;
 
+import src.Digest;
+import src.Dispatcher;
+import src.Event;
 import src.Message;
 import src.messages.EventResponseMessage;
 import src.messages.GossipMessage;
 import src.messages.RequestMessage;
 
 import java.net.DatagramPacket;
+import java.util.LinkedList;
 
 public class MessageHandlerThread extends Thread {
 
@@ -33,7 +37,29 @@ public class MessageHandlerThread extends Thread {
     }
 
     public void handleGossipMessage(GossipMessage gossipMessage) {
+//        LinkedList<Dispatcher> dispatcherList = subscriptionTable.get(gossipMessage.getPattern());
+        LinkedList<Dispatcher> dispatcherList = new LinkedList<>();
 
+        //Checking to see if self is subscribed to pattern
+        if(dispatcherList.contains(this)){
+            RequestMessage reqMsg = new RequestMessage();
+            Digest digest = gossipMessage.getDigest();
+            LinkedList<Event> eventList = digest.getEventList();
+
+            for(Event event: eventList){
+                if(isReceived(event.getIdentifier())){
+                    reqMsg.addEvent(event);
+
+                }
+            }
+
+            if(reqMsg.getEventList().size() != 0){
+                //Send request message to Gossip Message Initiator
+            }
+        }
+
+        //Do we worry about probability?
+        //Send gossip message to 2 other dispatchers
     }
 
     public void sendMessage() {
@@ -66,5 +92,17 @@ public class MessageHandlerThread extends Thread {
             System.out.println("Something went wrong and we received a message we didn't understand. \n");
          }
 
+    }
+
+    /**  returns true if the dispatcher received an event with the given id **/
+    public boolean isReceived(String id){
+        LinkedList<Event> eventCache = new LinkedList<>(); // Will Fix
+
+        for(Event event: eventCache){
+            if(event.getIdentifier() == id){
+                return true;
+            }
+        }
+        return false;
     }
 }

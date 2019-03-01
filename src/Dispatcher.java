@@ -82,42 +82,8 @@ public class Dispatcher {
 		System.out.println("Starting Dispatcher.");
 	}
 
-	public void handleGossipMsg(GossipMessage message){
-		LinkedList<Dispatcher> dispatcherList = subscriptionTable.get(message.getPattern());
-
-		//Checking to see if self is subscribed to pattern
-		if(dispatcherList.contains(this)){
-			RequestMessage reqMsg = new RequestMessage();
-			Digest digest = message.getDigest();
-			LinkedList<Event> eventList = digest.getEventList();
-
-			for(Event event: eventList){
-				if(isReceived(event.getIdentifier())){
-					reqMsg.addEvent(event);
-
-				}
-			}
-
-			if(reqMsg.getEventList().size() != 0){
-			    //Send request message to Gossip Message Initiator
-			}
-		}
-
-		//Do we worry about probability?
-		//Send gossip message to 2 other dispatchers
 
 
-	}
-
-	/**  returns true if the dispatcher received an event with the given id **/
-	public boolean isReceived(String id){
-		for(Event event: eventCache){
-			if(event.getIdentifier() == id){
-				return true;
-			}
-		}
-		return false;
-	}
 
 
 
