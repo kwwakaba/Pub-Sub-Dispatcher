@@ -8,9 +8,16 @@ import src.messages.EventResponseMessage;
 import src.messages.GossipMessage;
 import src.messages.RequestMessage;
 
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectOutputStream;
 import java.net.DatagramPacket;
 import java.util.LinkedList;
+import java.net.DatagramSocket;
 
+
+/**
+ * Thread for handling the messages we received.
+ */
 public class MessageHandlerThread extends Thread {
 
     /** The converted data from the packet as an object. */
@@ -18,6 +25,9 @@ public class MessageHandlerThread extends Thread {
 
     /** The packet that was read from the socket. */
     DatagramPacket packet;
+
+    /** Port number for sending messages. */
+    int portNumber = 9876;
 
     /** Constructor
      *
@@ -30,10 +40,12 @@ public class MessageHandlerThread extends Thread {
 
     public void handleEventResponseMessage(EventResponseMessage eventResponseMessage) {
 
+        //TODO - Extract the events from message and add the events to the cache.
+
     }
 
     public void handleRequestMessage(RequestMessage requestMessage) {
-
+        //TODO - Check the cache and see if we can send the events along.
     }
 
     public void handleGossipMessage(GossipMessage gossipMessage) {
@@ -63,6 +75,20 @@ public class MessageHandlerThread extends Thread {
     }
 
     public void sendMessage() {
+        try {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ObjectOutputStream oos = new ObjectOutputStream(baos);
+            oos.writeObject(message);
+            byte[] data = baos.toByteArray();
+
+            System.out.println("Successfully serialized the data to a byte array.");
+
+            //Send data
+            DatagramSocket serverSocket = new DatagramSocket(portNumber);
+            serverSocket.send(new DatagramPacket(data, data.length, packet.getAddress(), packet.getPort()));
+        } catch (Exception e) {
+            System.out.println("Something went wrong trying to send message. " + e.getStackTrace());
+        }
 
     }
 

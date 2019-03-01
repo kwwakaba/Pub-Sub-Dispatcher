@@ -1,11 +1,17 @@
 package src;
+<<<<<<< HEAD
 
+=======
+import src.messages.*;
+
+import java.net.InetAddress;
+>>>>>>> 890db03... Adding in more untested stuff for sending the message/converting object to
 import java.util.LinkedList;
 import java.util.HashMap;
 import java.util.concurrent.Semaphore;
 
 public class Dispatcher {
-	
+
 	// MARK: - Instance Variable
 	private static Semaphore mutex = new Semaphore(1);
 	private String identifier, ipAddress;
@@ -78,7 +84,18 @@ public class Dispatcher {
 	public static void main(String[] args)
 	{
 
-		System.out.println("Starting Dispatcher.");
+
+	    String ipAddress = null;
+	    try {
+	        ipAddress = InetAddress.getLocalHost().toString();
+            System.out.println("IPAddress of host:" + ipAddress);
+        } catch (Exception e) {
+	        System.out.println("Something went wrong trying to get the IP address of the host.");
+	        return;
+        }
+
+
+        System.out.println("Starting Dispatcher.");
 	}
 
 
