@@ -1,12 +1,15 @@
 package src;
 
+import src.messages.*;
+
 import java.util.LinkedList;
 import java.util.HashMap;
+import java.util.concurrent.Semaphore;
 
 public class Dispatcher {
 	
-	// MARK: - Instance Variables
-	
+	// MARK: - Instance Variable
+	private static Semaphore mutex = new Semaphore(1);
 	private String identifier, ipAddress;
 	private int portNumber;
 	private LinkedList<Dispatcher> neighborTable; //This probably makes more sense to implement as a set.
@@ -60,19 +63,63 @@ public class Dispatcher {
 	public LinkedList<Dispatcher> getDispatcherListForPattern(String pattern) {
 		return subscriptionTable.get(pattern);
 	}
-	
-	public void addEventToCache(Event e) {
+
+
+	public void addEventToCache(Event e) throws InterruptedException {
+		mutex.acquire();
 		eventCache.add(e);
+		mutex.release();
 	}
 	
 	public LinkedList<Event> getEventCache() {
 		return eventCache;
 	}
 
-	public static void main(String [ ] args)
+
+	public static void main(String[] args)
 	{
 
 		System.out.println("Starting Dispatcher.");
 	}
-	
+
+	public void handleGossipMsg(GossipMessage message){
+		LinkedList<Dispatcher> dispatcherList = subscriptionTable.get(message.getPattern());
+
+		//Checking to see if self is subscribed to pattern
+		if(dispatcherList.contains(this)){
+			RequestMessage reqMsg = new RequestMessage();
+			Digest digest = message.getDigest();
+			LinkedList<Event> eventList = digest.getEventList();
+
+			for(Event event: eventList){
+				if(isReceived(event.getIdentifier())){
+					reqMsg.addEvent(event);
+
+				}
+			}
+
+			if(reqMsg.getEventList().size() != 0){
+			    //Send request message to Gossip Message Initiator
+			}
+		}
+
+		//Do we worry about probability?
+		//Send gossip message to 2 other dispatchers
+
+
+	}
+
+	/**  returns true if the dispatcher received an event with the given id **/
+	public boolean isReceived(String id){
+		for(Event event: eventCache){
+			if(event.getIdentifier() == id){
+				return true;
+			}
+		}
+		return false;
+	}
+
+
+
+
 }
