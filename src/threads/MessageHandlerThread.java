@@ -68,11 +68,9 @@ public class MessageHandlerThread extends Thread {
             LinkedList<Event> eventList = digest.getEventList();
 
             for(Event event: eventList){
-                if(isReceived(event.getIdentifier())){
+                if(!isReceived(event.getIdentifier())){
                     reqMsg.addEvent(event);
-
                 }
-
             }
             //Send request message to Gossip Message Initiator
             if(reqMsg.getEventList().size() != 0){
@@ -87,9 +85,7 @@ public class MessageHandlerThread extends Thread {
                     serverSocket.send(new DatagramPacket(data, data.length, dispatcher.getIpAddress(), dispatcher.getPortNumber()));
                 } catch (Exception e){
                     System.out.println("Something went wrong trying to send message. " + e.getStackTrace());
-
                 }
-
             }
         }
     }
@@ -167,7 +163,7 @@ public class MessageHandlerThread extends Thread {
 
     /**  returns true if the dispatcher received an event with the given id **/
     public boolean isReceived(String id){
-        LinkedList<Event> eventCache = new LinkedList<>(); // Will Fix
+        LinkedList<Event> eventCache = Dispatcher.getEventCache(); // Will Fix
 
         for(Event event: eventCache){
             if(event.getIdentifier() == id){
