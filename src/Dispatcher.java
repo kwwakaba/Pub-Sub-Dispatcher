@@ -54,6 +54,10 @@ public class Dispatcher {
 	public static LinkedList<Dispatcher> getNeighbors() {
 		return neighborTable;
 	}
+
+	public static HashMap<String, LinkedList<Dispatcher>> getSubscriptionTable() {
+		return subscriptionTable;
+	}
 	
 	public static void addSubscription(String pattern, LinkedList<Dispatcher> dispatcherList) {
 		subscriptionTable.put(pattern, dispatcherList);
@@ -97,6 +101,7 @@ public class Dispatcher {
 
         // Starts the thread that wakes up randomly to push gossip messages across the network.
         StartGossipThread startGossipThread = new StartGossipThread();
+        startGossipThread.setup(identifier);
 	    startGossipThread.run();
 
         // Starts the thread that puts stuff into the Event Cache. Should be started after
