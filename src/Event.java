@@ -28,8 +28,8 @@ public class Event implements Serializable {
 		return description;
 	}
 
-	/** This will probably be needed when we go to write the events to the DatagramPacket message.
-	 * Since it is written to the socket as a stream of bytes. */
+/*	*//** This will probably be needed when we go to write the events to the DatagramPacket message.
+	 * Since it is written to the socket as a stream of bytes. *//*
 	// !!! UNTESTED !!!!
 	public static byte[] toStream(Event event) {
 		// Reference for stream of bytes
@@ -46,6 +46,6 @@ public class Event implements Serializable {
 			e.printStackTrace();
 		}
 		return stream;
-	}
+	}*/
 	
 }
