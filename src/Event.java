@@ -9,13 +9,14 @@ public class Event implements Serializable {
 	
 	// MARK: - Instance Variables
 	
-	private String identifier, description;
+	private String identifier, description, pattern;
 	
 	// MARK: - Constructor
 	
-	public Event(String identifier, String description) {
+	public Event(String identifier, String description, String pattern) {
 		this.identifier = identifier;
 		this.description = description;
+		this.pattern = pattern;
 	}
 	
 	// MARK: - Instance Methods
@@ -26,6 +27,10 @@ public class Event implements Serializable {
 	
 	public String getDescription() {
 		return description;
+	}
+
+	public String getPattern() {
+		return pattern;
 	}
 
 /*	*//** This will probably be needed when we go to write the events to the DatagramPacket message.
