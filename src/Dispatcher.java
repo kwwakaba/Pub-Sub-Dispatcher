@@ -7,12 +7,12 @@ import java.util.LinkedList;
 import java.util.HashMap;
 import java.util.concurrent.Semaphore;
 
-public static class Dispatcher {
+public class Dispatcher {
 
 	// MARK: - Instance Variable
 	private static Semaphore mutex = new Semaphore(1);
-	private static String identifier, ipAddress;
-	private static int portNumber;
+	private String identifier, ipAddress;
+	private int portNumber;
 
 	private static LinkedList<Dispatcher> neighborTable; //This probably makes more sense to implement as a set.
 	private static HashMap<String, LinkedList<Dispatcher>> subscriptionTable; //Should this be pattern -> List of distributors?

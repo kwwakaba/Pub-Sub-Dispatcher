@@ -6,6 +6,12 @@ package src.threads;
  *
  */
 public class EventGeneratorThread extends Thread {
+	// constants (in milliseconds) for generating the random sleep time
+	private static final MIN_BOUND_SLEEP = 15000;
+	private static final MAX_BOUND_SLEEP = 25000;
+
+	private static Semaphore mutex;
+
 	private int randomTimeToSleep;
 
     public void run() {
@@ -15,13 +21,21 @@ public class EventGeneratorThread extends Thread {
         // Get Mutex
         // Put stuff in the cache.
 
+        mutex = new Semaphore(1);
+
         while (true) {
             try {
-                // generates a random sleep time between 5000 to 15000 (5 to 15 seconds)
-                randomTimeToSleep = (int)(Math.random() * 10000 + 5000);
+                // generates a random sleep time between MIN_BOUND_SLEEP to MAX_BOUND_SLEEP
+                randomTimeToSleep = (int)(Math.random() * (MAX_BOUND_SLEEP - MIN_BOUND_SLEEP) + MIN_BOUND_SLEEP);
                 Thread.sleep(randomTimeToSleep);
 
-                // get instance of static Dispatcher
+                // I don't think we need the following line because addEvent() in Dispatcher already has this...
+                /*if (mutex.tryAcquire()) {
+
+                }*/
+
+                // generate a random Event to add to Dispatcher's cache
+                
             } catch (Exception e) {
                 System.out.println("Something went wrong with the thread sleeping.");
             }
