@@ -103,12 +103,12 @@ public class Dispatcher {
         StartGossipThread startGossipThread = new StartGossipThread();
         startGossipThread.setup(identifier);
 	    startGossipThread.run();
-
+	    
         // Starts the thread that puts stuff into the Event Cache. Should be started after
         // Dispatcher initialization since this tries to reference the EventCache.
         EventGeneratorThread eventGeneratorThread = new EventGeneratorThread();
-        eventGeneratorThread.setup(identifier, ipAddress, portNumber);
-        eventGeneratorThread.start();
+        eventGeneratorThread.setup(dispatcher.getIdentifier(), dispatcher.getIpAddress().toString(), dispatcher.getPortNumber());
+        eventGeneratorThread.run();
 
         System.out.println("Starting Dispatcher.");
 	}

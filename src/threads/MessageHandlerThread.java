@@ -43,6 +43,14 @@ public class MessageHandlerThread extends Thread {
     public void handleEventResponseMessage(EventResponseMessage eventResponseMessage) {
 
         //TODO - Extract the events from message and add the events to the cache.
+        try{
+            for(Event event: eventResponseMessage.getEvents()){
+                Dispatcher.addEventToCache(event);
+            }
+        }catch (Exception e){
+            System.out.println("Error occurred trying to populate cache from response message. " + e.getStackTrace());
+        }
+
 
     }
 
@@ -69,7 +77,7 @@ public class MessageHandlerThread extends Thread {
             datagramSocket.send(packet);
 
         } catch (Exception e){
-            System.out.println("Something went wrong trying to send message. " + e.getStackTrace());
+            System.out.println("Something went wrong trying to send handleRequestMessage. " + e.getStackTrace());
         }
     }
 
@@ -99,7 +107,7 @@ public class MessageHandlerThread extends Thread {
                     DatagramSocket serverSocket = new DatagramSocket(packet.getPort());
                     serverSocket.send(new DatagramPacket(data, data.length, dispatcher.getIpAddress(), dispatcher.getPortNumber()));
                 } catch (Exception e){
-                    System.out.println("Something went wrong trying to send message. " + e.getStackTrace());
+                    System.out.println("Something went wrong trying to send handleGossipMessage. " + e.getStackTrace());
                 }
             }
         }
@@ -117,7 +125,7 @@ public class MessageHandlerThread extends Thread {
             System.out.println("Successfully serialized the data to a byte array.");
 
         }catch (Exception e){
-
+            System.out.println("Something went wrong trying to get data byte array. " + e.getStackTrace());
         }
         return data;
     }
@@ -130,7 +138,7 @@ public class MessageHandlerThread extends Thread {
             DatagramSocket datagramSocket = new DatagramSocket();
             datagramSocket.send(packet);
         }catch (Exception e){
-            System.out.println("Something went wrong trying to send message. " + e.getStackTrace());
+            System.out.println("Something went wrong trying to sendDispatcherMessage. " + e.getStackTrace());
         }
     }
 
@@ -143,7 +151,7 @@ public class MessageHandlerThread extends Thread {
             DatagramSocket serverSocket = new DatagramSocket(packet.getPort());
             serverSocket.send(new DatagramPacket(data, data.length, packet.getAddress(), packet.getPort()));
         } catch (Exception e) {
-            System.out.println("Something went wrong trying to send message. " + e.getStackTrace());
+            System.out.println("Something went wrong trying to sendMessage. " + e.getStackTrace());
         }
 
     }
