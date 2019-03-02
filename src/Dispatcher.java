@@ -1,11 +1,8 @@
 package src;
-<<<<<<< HEAD
-
-=======
 import src.messages.*;
+import src.threads.NotificationThread;
 
 import java.net.InetAddress;
->>>>>>> 890db03... Adding in more untested stuff for sending the message/converting object to
 import java.util.LinkedList;
 import java.util.HashMap;
 import java.util.concurrent.Semaphore;
@@ -84,7 +81,6 @@ public class Dispatcher {
 	public static void main(String[] args)
 	{
 
-
 	    String ipAddress = null;
 	    try {
 	        ipAddress = InetAddress.getLocalHost().toString();
@@ -94,6 +90,9 @@ public class Dispatcher {
 	        return;
         }
 
+        //Starts the process that puts stuff into the Event Cache.
+        NotificationThread notificationThread = new NotificationThread();
+        notificationThread.start();
 
         System.out.println("Starting Dispatcher.");
 	}
