@@ -1,5 +1,10 @@
 package src.threads;
 
+import src.Digest;
+import src.Dispatcher;
+import src.Event;
+import src.messages.GossipMessage;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -23,7 +28,7 @@ public class StartGossipThread extends Thread {
                 Thread.sleep(GOSSIP_TIMEOUT);
                 startGossipRound();
             } catch (Exception e) {
-                System.out.println("Error in StartGossipThread caught. \n");
+                System.out.println("Error in StartGossipThread caught.");
                 System.out.println("Something went wrong with the thread sleeping." + e.getStackTrace());
             }
         }
@@ -31,6 +36,10 @@ public class StartGossipThread extends Thread {
 
     private void startGossipRound() {
         // choose a random pattern from the subscription table
+        if (Dispatcher.getSubscriptionTable().isEmpty()) {
+            System.out.println("Subscription Table is empty, so aborting gossip round.");
+            return;
+        }
         ArrayList<String> keysAsArray = new ArrayList<>(Dispatcher.getSubscriptionTable().keySet());
         String selectedPattern = keysAsArray.get((int)(Math.random() * keysAsArray.size()));
 
