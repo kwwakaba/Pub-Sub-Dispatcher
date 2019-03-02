@@ -1,5 +1,5 @@
 package src;
-import src.threads.NotificationThread;
+import src.threads.EventGeneratorThread;
 import src.threads.StartGossipThread;
 
 import java.net.InetAddress;
@@ -11,7 +11,8 @@ public class Dispatcher {
 
 	// MARK: - Instance Variable
 	private static Semaphore mutex = new Semaphore(1);
-	private String identifier, ipAddress;
+	private String identifier;
+	private InetAddress ipAddress;
 	private int portNumber;
 
 	private static LinkedList<Dispatcher> neighborTable; //This probably makes more sense to implement as a set.
@@ -22,7 +23,7 @@ public class Dispatcher {
 	
 	// MARK: - Constructor
 	
-	public Dispatcher(String identifier, String ipAddress, int portNumber) {
+	public Dispatcher(String identifier, InetAddress ipAddress, int portNumber) {
 		this.identifier = identifier;
 		this.ipAddress = ipAddress;
 		this.portNumber = portNumber;
@@ -34,15 +35,15 @@ public class Dispatcher {
 	
 	// MARK: - Instance Methods
 	
-	public static String getIdentifier() {
+	public  String getIdentifier() {
 		return identifier;
 	}
 	
-	public static String getIpAddress() {
+	public  InetAddress getIpAddress() {
 		return ipAddress;
 	}
 	
-	public static int getPortNumber() {
+	public int getPortNumber() {
 		return portNumber;
 	}
 	
@@ -82,9 +83,9 @@ public class Dispatcher {
 	{
 
 	    //Get the IPAddresss of our local machine.
-	    String ipAddress = null;
+	    InetAddress ipAddress;
 	    try {
-	        ipAddress = InetAddress.getLocalHost().getHostAddress().toString();
+	        ipAddress = InetAddress.getLocalHost();
             System.out.println("IPAddress of host: " + ipAddress);
         } catch (Exception e) {
 	        System.out.println("Something went wrong trying to get the IP address of the host.");
@@ -100,7 +101,7 @@ public class Dispatcher {
 
         // Starts the thread that puts stuff into the Event Cache. Should be started after
         // Dispatcher initialization since this tries to reference the EventCache.
-        NotificationThread notificationThread = new NotificationThread();
+        EventGeneratorThread notificationThread = new EventGeneratorThread();
         notificationThread.start();
 
         System.out.println("Starting Dispatcher.");
