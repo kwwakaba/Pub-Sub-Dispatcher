@@ -101,16 +101,11 @@ public class Dispatcher {
 
         // Starts the thread that puts stuff into the Event Cache. Should be started after
         // Dispatcher initialization since this tries to reference the EventCache.
-        EventGeneratorThread notificationThread = new EventGeneratorThread();
-        notificationThread.start();
+        EventGeneratorThread eventGeneratorThread = new EventGeneratorThread();
+        eventGeneratorThread.setup(identifier, ipAddress, portNumber);
+        eventGeneratorThread.start();
 
         System.out.println("Starting Dispatcher.");
 	}
-
-
-
-
-
-
 
 }
