@@ -49,13 +49,28 @@ public class MessageHandlerThread extends Thread {
     public void handleRequestMessage(RequestMessage requestMessage) {
         LinkedList<Event> eventList = requestMessage.getEventList();
         LinkedList<Event> eventCache = Dispatcher.getEventCache();
+        LinkedList<Event> eventResponseList = new LinkedList<>();
 
+        byte[] data;
         for(Event event: eventList){
             if(eventCache.contains(event)){
-
+                eventResponseList.add(event);
             }
         }
 
+        try{
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ObjectOutputStream oos = new ObjectOutputStream(baos);
+            oos.writeObject(eventResponseList);
+            data = baos.toByteArray();
+
+            packet.setData(data);
+            DatagramSocket datagramSocket = new DatagramSocket();
+            datagramSocket.send(packet);
+
+        } catch (Exception e){
+            System.out.println("Something went wrong trying to send message. " + e.getStackTrace());
+        }
     }
 
     public void handleGossipMessage(GossipMessage gossipMessage) {
