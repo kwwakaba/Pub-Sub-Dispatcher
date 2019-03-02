@@ -10,11 +10,11 @@ import java.util.ArrayList;
  */
 public class EventGeneratorThread extends Thread {
 	// constants (in milliseconds) for generating the random sleep time
-	private static final MIN_BOUND_SLEEP = 15000;
-	private static final MAX_BOUND_SLEEP = 25000;
+	private static final int MIN_BOUND_SLEEP = 15000;
+	private static final int MAX_BOUND_SLEEP = 25000;
 
 	// constant for number of random patterns to generate
-	private static final NUM_PATTERNS = 10;
+	private static final int NUM_PATTERNS = 10;
 
 	// private static Semaphore mutex;
 
