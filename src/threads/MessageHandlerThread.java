@@ -11,6 +11,7 @@ import src.messages.RequestMessage;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectOutputStream;
 import java.net.DatagramPacket;
+import java.net.InetAddress;
 import java.util.LinkedList;
 import java.net.DatagramSocket;
 
@@ -27,8 +28,8 @@ public class MessageHandlerThread extends Thread {
     /** The packet that was read from the socket. */
     DatagramPacket packet;
 
-    /** Port number for sending messages. */
-    int portNumber = 9876;
+
+
 
     /** Constructor
      *
@@ -67,33 +68,64 @@ public class MessageHandlerThread extends Thread {
             LinkedList<Event> eventList = digest.getEventList();
 
             for(Event event: eventList){
-                if(isReceived(event.getIdentifier())){
+                if(!isReceived(event.getIdentifier())){
                     reqMsg.addEvent(event);
-
                 }
             }
-
+            //Send request message to Gossip Message Initiator
             if(reqMsg.getEventList().size() != 0){
-                //Send request message to Gossip Message Initiator
+                sendDispatcherMessage(reqMsg);
+            }
 
+            //Send request message to neighbors
+            for(Dispatcher dispatcher: Dispatcher.getNeighbors()){
+                try{
+                    byte[] data = getDataByteArray(reqMsg);
+                    DatagramSocket serverSocket = new DatagramSocket(packet.getPort());
+                    serverSocket.send(new DatagramPacket(data, data.length, dispatcher.getIpAddress(), dispatcher.getPortNumber()));
+                } catch (Exception e){
+                    System.out.println("Something went wrong trying to send message. " + e.getStackTrace());
+                }
             }
         }
-
-        //Do we worry about probability?
-        //Send gossip message to 2 other dispatchers
     }
 
-    public void sendMessage() {
-        try {
+    public byte[] getDataByteArray(Message message){
+        byte[] data = null;
+
+        try{
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             ObjectOutputStream oos = new ObjectOutputStream(baos);
             oos.writeObject(message);
-            byte[] data = baos.toByteArray();
+            data = baos.toByteArray();
 
             System.out.println("Successfully serialized the data to a byte array.");
 
+        }catch (Exception e){
+
+        }
+        return data;
+    }
+
+    public void sendDispatcherMessage(Message message){
+        try{
+            byte[] reqData = getDataByteArray(message);
+
+            packet.setData(reqData);
+            DatagramSocket datagramSocket = new DatagramSocket();
+            datagramSocket.send(packet);
+        }catch (Exception e){
+            System.out.println("Something went wrong trying to send message. " + e.getStackTrace());
+        }
+    }
+
+
+    public void sendMessage() {
+        try {
+            byte[] data = getDataByteArray(message);
+
             //Send data
-            DatagramSocket serverSocket = new DatagramSocket(portNumber);
+            DatagramSocket serverSocket = new DatagramSocket(packet.getPort());
             serverSocket.send(new DatagramPacket(data, data.length, packet.getAddress(), packet.getPort()));
         } catch (Exception e) {
             System.out.println("Something went wrong trying to send message. " + e.getStackTrace());
@@ -131,7 +163,7 @@ public class MessageHandlerThread extends Thread {
 
     /**  returns true if the dispatcher received an event with the given id **/
     public boolean isReceived(String id){
-        LinkedList<Event> eventCache = new LinkedList<>(); // Will Fix
+        LinkedList<Event> eventCache = Dispatcher.getEventCache(); // Will Fix
 
         for(Event event: eventCache){
             if(event.getIdentifier() == id){
