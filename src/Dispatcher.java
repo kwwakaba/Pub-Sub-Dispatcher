@@ -97,7 +97,7 @@ public class Dispatcher {
 
         // Starts the thread that wakes up randomly to push gossip messages across the network.
         StartGossipThread startGossipThread = new StartGossipThread();
-	    startGossipThread.run();
+	    startGossipThread.start();
 
         // Starts the thread that puts stuff into the Event Cache. Should be started after
         // Dispatcher initialization since this tries to reference the EventCache.

@@ -1,5 +1,8 @@
 package src.threads;
 
+import src.Dispatcher;
+import src.Event;
+
 import java.lang.Math;
 import java.util.ArrayList;
 
@@ -58,6 +61,7 @@ public class EventGeneratorThread extends Thread {
                 String description = "Dispatcher '" + identifier + "' with IP '" + ipAddress + "' and port " + portNumber;
                 // chooses a random pattern from the list of possible patterns
                 String pattern = possiblePatterns.get((int)(Math.random() * possiblePatterns.size()));
+
                 Event newEvent = new Event(identifier, description, pattern);
 
                 // I don't think we need the following line because addEvent() in Dispatcher already has this...
