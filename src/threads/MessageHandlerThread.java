@@ -45,12 +45,19 @@ public class MessageHandlerThread extends Thread {
     }
 
     public void handleRequestMessage(RequestMessage requestMessage) {
-        //TODO - Check the cache and see if we can send the events along.
+        LinkedList<Event> eventList = requestMessage.getEventList();
+        LinkedList<Event> eventCache = Dispatcher.getEventCache();
+
+        for(Event event: eventList){
+            if(eventCache.contains(event)){
+
+            }
+        }
+
     }
 
     public void handleGossipMessage(GossipMessage gossipMessage) {
-//        LinkedList<Dispatcher> dispatcherList = subscriptionTable.get(gossipMessage.getPattern());
-        LinkedList<Dispatcher> dispatcherList = new LinkedList<>();
+        LinkedList<Dispatcher> dispatcherList = Dispatcher.getDispatcherListForPattern(gossipMessage.getPattern());
 
         //Checking to see if self is subscribed to pattern
         if(dispatcherList.contains(this)){
@@ -67,6 +74,7 @@ public class MessageHandlerThread extends Thread {
 
             if(reqMsg.getEventList().size() != 0){
                 //Send request message to Gossip Message Initiator
+
             }
         }
 
