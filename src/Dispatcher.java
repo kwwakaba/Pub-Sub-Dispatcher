@@ -11,8 +11,8 @@ public class Dispatcher {
 
 	// MARK: - Instance Variable
 	private static Semaphore mutex = new Semaphore(1);
-	private String identifier, ipAddress;
-	private int portNumber;
+	private static String identifier, ipAddress;
+	private static int portNumber;
 
 	private static LinkedList<Dispatcher> neighborTable; //This probably makes more sense to implement as a set.
 	private static HashMap<String, LinkedList<Dispatcher>> subscriptionTable; //Should this be pattern -> List of distributors?
@@ -34,19 +34,19 @@ public class Dispatcher {
 	
 	// MARK: - Instance Methods
 	
-	public String getIdentifier() {
+	public static String getIdentifier() {
 		return identifier;
 	}
 	
-	public String getIpAddress() {
+	public static String getIpAddress() {
 		return ipAddress;
 	}
 	
-	public int getPortNumber() {
+	public static int getPortNumber() {
 		return portNumber;
 	}
 	
-	public void addNeighbor(Dispatcher d) {
+	public static void addNeighbor(Dispatcher d) {
 		neighborTable.add(d);
 	}
 	
@@ -54,11 +54,11 @@ public class Dispatcher {
 		return neighborTable;
 	}
 	
-	public void addSubscription(String pattern, LinkedList<Dispatcher> dispatcherList) {
+	public static void addSubscription(String pattern, LinkedList<Dispatcher> dispatcherList) {
 		subscriptionTable.put(pattern, dispatcherList);
 	}
 	
-	public void addDispatcherToListWithPattern(Dispatcher d, String pattern) {
+	public static void addDispatcherToListWithPattern(Dispatcher d, String pattern) {
 		subscriptionTable.get(pattern).add(d);
 	}
 	
@@ -67,7 +67,7 @@ public class Dispatcher {
 	}
 
 
-	public void addEventToCache(Event e) throws InterruptedException {
+	public static void addEventToCache(Event e) throws InterruptedException {
 		if(mutex.tryAcquire())
 			eventCache.add(e);
 		mutex.release();
