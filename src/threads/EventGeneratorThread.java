@@ -6,6 +6,7 @@ package src.threads;
  *
  */
 public class EventGeneratorThread extends Thread {
+	private int randomTimeToSleep;
 
     public void run() {
         // TODO
@@ -13,7 +14,18 @@ public class EventGeneratorThread extends Thread {
         // Get instance of Dispatcher
         // Get Mutex
         // Put stuff in the cache.
-        
+
+        while (true) {
+            try {
+                // generates a random sleep time between 5000 to 15000 (5 to 15 seconds)
+                randomTimeToSleep = (int)(Math.random() * 10000 + 5000);
+                Thread.sleep(randomTimeToSleep);
+
+                // get instance of static Dispatcher
+            } catch (Exception e) {
+                System.out.println("Something went wrong with the thread sleeping.");
+            }
+        }
     }
 
 }

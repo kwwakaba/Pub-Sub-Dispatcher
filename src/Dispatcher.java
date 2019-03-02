@@ -7,7 +7,7 @@ import java.util.LinkedList;
 import java.util.HashMap;
 import java.util.concurrent.Semaphore;
 
-public class Dispatcher {
+public static class Dispatcher {
 
 	// MARK: - Instance Variable
 	private static Semaphore mutex = new Semaphore(1);
