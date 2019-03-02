@@ -19,31 +19,37 @@ public class SocketListenerThread extends Thread {
         try {
             //Open the socket and listen for messsages.
             // https://systembash.com/a-simple-java-udp-server-and-udp-client/
-            DatagramSocket serverSocket = new DatagramSocket(9876);
-            byte[] receiveData = new byte[1024];
+            int portNumber = 9876;
+            System.out.println("Socket Listener Thread started. \n");
+            System.out.println("SocketListenerThread: Listening to socket at port " + portNumber);
 
-            DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
-            serverSocket.receive(receivePacket);
+            DatagramSocket serverSocket = new DatagramSocket(portNumber);
 
-            //Try to parse the data received into a Message
-            byte[] data = receivePacket.getData();
-            ByteArrayInputStream in = new ByteArrayInputStream(data);
-            ObjectInputStream is = new ObjectInputStream(in);
-            Message message = null;
-            try {
-                message = (Message)is.readObject();
+            while (true) {
+                byte[] receiveData = new byte[1024];
+                DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
+                serverSocket.receive(receivePacket);
 
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            }
+                //Try to parse the data received into a Message
+                byte[] data = receivePacket.getData();
+                ByteArrayInputStream in = new ByteArrayInputStream(data);
+                ObjectInputStream is = new ObjectInputStream(in);
+                Message message = null;
+                try {
+                    message = (Message) is.readObject();
 
-            if (message != null) {
-                MessageHandlerThread messageParserThread = new MessageHandlerThread(receivePacket, message);
-                messageParserThread.start();
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+
+                if (message != null) {
+                    MessageHandlerThread messageParserThread = new MessageHandlerThread(receivePacket, message);
+                    messageParserThread.start();
+                }
             }
 
         } catch (Exception e) {
-
+            System.out.println("SocketListenerThread: Something went wrong. " + e.getStackTrace());
         }
 
     }

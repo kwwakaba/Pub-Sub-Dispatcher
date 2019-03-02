@@ -16,7 +16,8 @@ import java.net.DatagramSocket;
 
 
 /**
- * Thread for handling the messages we received.
+ * Thread for handling the messages we received. This thread is started by
+ * the Socket Listener Thread.
  */
 public class MessageHandlerThread extends Thread {
 

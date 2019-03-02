@@ -1,6 +1,6 @@
 package src;
-import src.messages.*;
 import src.threads.NotificationThread;
+import src.threads.StartGossipThread;
 
 import java.net.InetAddress;
 import java.util.LinkedList;
@@ -81,16 +81,25 @@ public class Dispatcher {
 	public static void main(String[] args)
 	{
 
+	    //Get the IPAddresss of our local machine.
 	    String ipAddress = null;
 	    try {
-	        ipAddress = InetAddress.getLocalHost().toString();
-            System.out.println("IPAddress of host:" + ipAddress);
+	        ipAddress = InetAddress.getLocalHost().getHostAddress().toString();
+            System.out.println("IPAddress of host: " + ipAddress);
         } catch (Exception e) {
 	        System.out.println("Something went wrong trying to get the IP address of the host.");
 	        return;
         }
 
-        //Starts the process that puts stuff into the Event Cache.
+        // Creates the one instance of the dispatcher.
+        Dispatcher dispatcher = new Dispatcher("IDENTIFIER", ipAddress, 9234);
+
+        // Starts the thread that wakes up randomly to push gossip messages across the network.
+        StartGossipThread startGossipThread = new StartGossipThread();
+	    startGossipThread.run();
+
+        // Starts the thread that puts stuff into the Event Cache. Should be started after
+        // Dispatcher initialization since this tries to reference the EventCache.
         NotificationThread notificationThread = new NotificationThread();
         notificationThread.start();
 
