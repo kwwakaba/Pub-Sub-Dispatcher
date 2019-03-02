@@ -85,7 +85,7 @@ public class Dispatcher {
 		return subscriptionTable.get(pattern);
 	}
 
-	public void addEventToCache(Event e) throws InterruptedException {
+	public static void addEventToCache(Event e) throws InterruptedException {
 
 		if(mutex.tryAcquire(2000, TimeUnit.MILLISECONDS)) {
             eventCache.add(e);
