@@ -41,12 +41,15 @@ public class MessageHandlerThread extends Thread {
     }
 
     public void handleEventResponseMessage(EventResponseMessage eventResponseMessage) {
+        System.out.println("Handling event response message " + eventResponseMessage);
 
         //TODO - Extract the events from message and add the events to the cache.
 
     }
 
     public void handleRequestMessage(RequestMessage requestMessage) {
+        System.out.println("Handling request message. " + requestMessage);
+
         LinkedList<Event> eventList = requestMessage.getEventList();
         LinkedList<Event> eventCache = Dispatcher.getEventCache();
         LinkedList<Event> eventResponseList = new LinkedList<>();
@@ -74,6 +77,7 @@ public class MessageHandlerThread extends Thread {
     }
 
     public void handleGossipMessage(GossipMessage gossipMessage) {
+        System.out.println("Handling gossip message" + gossipMessage);
         LinkedList<Dispatcher> dispatcherList = Dispatcher.getDispatcherListForPattern(gossipMessage.getPattern());
 
         //Checking to see if self is subscribed to pattern
