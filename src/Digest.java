@@ -1,8 +1,9 @@
 package src;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 
-public class Digest {
+public class Digest implements Serializable {
 	
 	// MARK: - Instance Variables
 	

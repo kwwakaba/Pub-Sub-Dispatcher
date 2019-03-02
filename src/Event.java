@@ -3,8 +3,9 @@ package src;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 
-public class Event {
+public class Event implements Serializable {
 	
 	// MARK: - Instance Variables
 	

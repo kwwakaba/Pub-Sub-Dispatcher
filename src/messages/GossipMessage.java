@@ -2,7 +2,9 @@ package src.messages;
 import src.Digest;
 import src.Message;
 
-public class GossipMessage extends Message {
+import java.io.Serializable;
+
+public class GossipMessage extends Message implements Serializable {
 	
 	// MARK: - Instance Variables
 	

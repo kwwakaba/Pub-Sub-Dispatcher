@@ -3,6 +3,7 @@ package src.messages;
 import src.Event;
 import src.Message;
 
+import java.io.Serializable;
 import java.net.DatagramPacket;
 import java.util.List;
 
@@ -11,7 +12,7 @@ import java.util.List;
  * Event Messages are sent from one Dispatcher to another
  * after receipt of a RequestMessage.
  */
-public class EventResponseMessage extends Message {
+public class EventResponseMessage extends Message implements Serializable {
 
     /** A list of events requested by the client. */
     private List<Event> events;

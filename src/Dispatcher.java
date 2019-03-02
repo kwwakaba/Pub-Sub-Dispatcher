@@ -1,7 +1,5 @@
 package src;
 
-import src.messages.*;
-
 import java.util.LinkedList;
 import java.util.HashMap;
 import java.util.concurrent.Semaphore;
@@ -12,11 +10,12 @@ public class Dispatcher {
 	private static Semaphore mutex = new Semaphore(1);
 	private String identifier, ipAddress;
 	private int portNumber;
-	private LinkedList<Dispatcher> neighborTable; //This probably makes more sense to implement as a set.
-	private HashMap<String, LinkedList<Dispatcher>> subscriptionTable; //Should this be pattern -> List of distributors?
+
+	private static LinkedList<Dispatcher> neighborTable; //This probably makes more sense to implement as a set.
+	private static HashMap<String, LinkedList<Dispatcher>> subscriptionTable; //Should this be pattern -> List of distributors?
 
 	/** Event cache needs to be protected by a mutex, since multiple threads will be reading/writing to the cache.*/
-	private LinkedList<Event> eventCache;
+	private static LinkedList<Event> eventCache;
 	
 	// MARK: - Constructor
 	
@@ -48,7 +47,7 @@ public class Dispatcher {
 		neighborTable.add(d);
 	}
 	
-	public LinkedList<Dispatcher> getNeighbors() {
+	public static LinkedList<Dispatcher> getNeighbors() {
 		return neighborTable;
 	}
 	
@@ -60,18 +59,18 @@ public class Dispatcher {
 		subscriptionTable.get(pattern).add(d);
 	}
 	
-	public LinkedList<Dispatcher> getDispatcherListForPattern(String pattern) {
+	public static LinkedList<Dispatcher> getDispatcherListForPattern(String pattern) {
 		return subscriptionTable.get(pattern);
 	}
 
 
 	public void addEventToCache(Event e) throws InterruptedException {
-		mutex.acquire();
-		eventCache.add(e);
+		if(mutex.tryAcquire())
+			eventCache.add(e);
 		mutex.release();
 	}
 	
-	public LinkedList<Event> getEventCache() {
+	public static LinkedList<Event> getEventCache() {
 		return eventCache;
 	}
 

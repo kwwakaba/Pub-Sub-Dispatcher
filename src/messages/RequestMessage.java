@@ -1,11 +1,12 @@
 package src.messages;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 import src.Event;
 import src.Message;
 
 
-public class RequestMessage extends Message {
+public class RequestMessage extends Message implements Serializable {
 	
 	// MARK: - Instance Variables
 	
