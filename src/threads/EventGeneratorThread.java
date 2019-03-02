@@ -5,7 +5,7 @@ package src.threads;
  *  by putting events in to the cache at random times.
  *
  */
-public class NotificationThread extends Thread {
+public class EventGeneratorThread extends Thread {
 
     public void run() {
         // TODO
@@ -13,6 +13,7 @@ public class NotificationThread extends Thread {
         // Get instance of Dispatcher
         // Get Mutex
         // Put stuff in the cache.
+        
     }
 
 }
