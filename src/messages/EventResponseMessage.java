@@ -4,6 +4,7 @@ import src.Event;
 import src.Message;
 
 import java.io.Serializable;
+import java.util.LinkedList;
 import java.util.List;
 
 /** Class for EventResponseMessage objects.
@@ -14,15 +15,15 @@ import java.util.List;
 public class EventResponseMessage extends Message implements Serializable {
 
     /** A list of events requested by the client. */
-    private List<Event> events;
+    private LinkedList<Event> events;
 
     public EventResponseMessage(String description,
-                                List<Event> events) {
+                                LinkedList<Event> events) {
         super(description);
         this.events = events;
     }
 
-    public List<Event> getEvents() {
+    public LinkedList<Event> getEvents() {
         return events;
     }
 }
