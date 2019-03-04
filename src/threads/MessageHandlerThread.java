@@ -11,9 +11,8 @@ import src.messages.RequestMessage;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectOutputStream;
 import java.net.DatagramPacket;
-import java.net.InetAddress;
-import java.util.LinkedList;
 import java.net.DatagramSocket;
+import java.util.LinkedList;
 
 
 /**

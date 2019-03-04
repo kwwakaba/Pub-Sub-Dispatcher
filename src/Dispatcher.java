@@ -1,13 +1,11 @@
 package src;
+
 import src.threads.EventGeneratorThread;
 import src.threads.StartGossipThread;
 
-import java.io.File;
 import java.net.InetAddress;
-import java.util.LinkedList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Scanner;
+import java.util.LinkedList;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
@@ -19,7 +17,8 @@ public class Dispatcher {
 	private InetAddress ipAddress;
 	private int portNumber;
 
-	private static LinkedList<Dispatcher> neighborTable;
+	private static LinkedList<Dispatcher> neighborTable = new LinkedList<>();
+
 	static {
 	    try {
 
@@ -65,7 +64,7 @@ public class Dispatcher {
         neighborTable.push(d);
     }
 
-	public LinkedList<Dispatcher> getNeighbors() {
+	public static LinkedList<Dispatcher> getNeighbors() {
 		return neighborTable;
 	}
 
@@ -150,6 +149,7 @@ public class Dispatcher {
         // Starts the thread that wakes up randomly to push gossip messages across the network.
         StartGossipThread startGossipThread = new StartGossipThread();
         startGossipThread.setup(dispatcher.getIdentifier());
+        startGossipThread.setup(dispatcher);
 	    startGossipThread.start();
 
         // Starts the thread that puts stuff into the Event Cache. Should be started after

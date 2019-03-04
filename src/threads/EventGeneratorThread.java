@@ -3,7 +3,6 @@ package src.threads;
 import src.Dispatcher;
 import src.Event;
 
-import java.lang.Math;
 import java.util.ArrayList;
 
 /**

@@ -5,7 +5,6 @@ import src.Message;
 
 import java.io.Serializable;
 import java.util.LinkedList;
-import java.util.List;
 
 /** Class for EventResponseMessage objects.
  *

@@ -5,8 +5,12 @@ import src.Dispatcher;
 import src.Event;
 import src.messages.GossipMessage;
 
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectOutputStream;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedList;
 
 /**
  * Thread for starting up the Gossip round.
@@ -16,9 +20,14 @@ public class StartGossipThread extends Thread {
 
     // stores identifier of the Dispatcher that started this Thread
     private String identifier;
+    private Dispatcher dispatcher;
 
     public void setup(String identifier) {
         this.identifier = identifier;
+    }
+
+    public void setup(Dispatcher dispatcher){
+        this.dispatcher = dispatcher;
     }
 
     public void run() {
@@ -53,6 +62,20 @@ public class StartGossipThread extends Thread {
 
         GossipMessage gossipMessage = new GossipMessage("gossip message description", identifier, selectedPattern, digest);
 
-        // TODO: send gossipMessage to one or more subscribers for the selectedPattern
+        LinkedList<Dispatcher> subscriberList = Dispatcher.getDispatcherListForPattern(selectedPattern);
+        byte[] data;
+        try{
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ObjectOutputStream oos = new ObjectOutputStream(baos);
+            oos.writeObject(gossipMessage);
+            data = baos.toByteArray();
+            DatagramSocket serverSocket = new DatagramSocket(dispatcher.getPortNumber());
+            for(Dispatcher subDispatcher: subscriberList){
+                serverSocket.send(new DatagramPacket(data, data.length, subDispatcher.getIpAddress(), subDispatcher.getPortNumber()));
+            }
+        }catch (Exception e){
+            System.out.println("Something went wrong with startGossipRound(). " + e.getStackTrace());
+        }
+
     }
 }

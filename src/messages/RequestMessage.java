@@ -1,9 +1,10 @@
 package src.messages;
 
-import java.io.Serializable;
-import java.util.LinkedList;
 import src.Event;
 import src.Message;
+
+import java.io.Serializable;
+import java.util.LinkedList;
 
 
 public class RequestMessage extends Message implements Serializable {
