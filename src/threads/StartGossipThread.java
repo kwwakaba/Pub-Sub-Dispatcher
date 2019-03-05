@@ -45,19 +45,24 @@ public class StartGossipThread extends Thread {
             System.out.println("Subscription Table is empty, so aborting gossip round.");
             return;
         }
+
         ArrayList<String> keysAsArray = new ArrayList<>(Dispatcher.getSubscriptionTable().keySet());
         String selectedPattern = keysAsArray.get((int) (Math.random() * keysAsArray.size()));
 
+        System.out.println("Starting gossip round with pattern " + selectedPattern);
         Digest digest = new Digest();
 
-        if (dispatcher.getEventCache().size() > 0) {
+        try {
             for (Event e : dispatcher.getEventCache()) {
                 if (e.getPattern().equals(selectedPattern)) {
                     digest.addEvent(e);
+                    System.out.println("Event id:" + e.getIdentifier() +" found that matched pattern: "
+                            + selectedPattern);
                 }
             }
-        } else {
-            System.out.println("Event Cache is empty");
+        } catch (InterruptedException e) {
+            System.out.println("We caught an InterruptedException in start gossip thread.");
+        }
 
 
             GossipMessage gossipMessage = new GossipMessage("gossip message description", dispatcher.getIdentifier(), selectedPattern, digest);

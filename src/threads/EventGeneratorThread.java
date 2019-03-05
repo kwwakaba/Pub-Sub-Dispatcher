@@ -51,6 +51,8 @@ public class EventGeneratorThread extends Thread {
                 randomTimeToSleep = (int)(Math.random() * (MAX_BOUND_SLEEP - MIN_BOUND_SLEEP) + MIN_BOUND_SLEEP);
                 Thread.sleep(randomTimeToSleep);
 
+                System.out.println("Event Generation Thread waking up. ");
+
                 // generate a random Event to add to Dispatcher's cache
                 String identifier = "Event " + counter;
                 String description = "Dispatcher '" + identifier + "' with IP '" + dispatcher.getIpAddress().getHostAddress() + "' and port " + dispatcher.getPortNumber();
@@ -58,7 +60,7 @@ public class EventGeneratorThread extends Thread {
                 String pattern = possiblePatterns.get((int)(Math.random() * possiblePatterns.size()));
 
                 Event newEvent = new Event(identifier, description, pattern);
-
+                System.out.println("Adding event to cache with description: " + description);
                 dispatcher.addEventToCache(newEvent);
 
                 counter++;
