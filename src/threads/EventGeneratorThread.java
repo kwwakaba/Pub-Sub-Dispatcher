@@ -43,8 +43,9 @@ public class EventGeneratorThread extends Thread {
     public void run() {
         // mutex = new Semaphore(1);
 
+        int counter = 1;
         while (true) {
-            int counter = 1;
+
 
             try {
                 // generates a random sleep time between MIN_BOUND_SLEEP to MAX_BOUND_SLEEP
