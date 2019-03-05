@@ -195,13 +195,18 @@ public class MessageHandlerThread extends Thread {
 
     /**  returns true if the dispatcher received an event with the given id **/
     public boolean isReceived(String id) throws InterruptedException {
-        LinkedList<Event> eventCache = Dispatcher.getEventCache(); // Will Fix
+        LinkedList<Event> eventCache = Dispatcher.getEventCache();
 
-        for(Event event: eventCache){
-            if(event.getIdentifier() == id){
-                return true;
+        if(eventCache.size() > 0){
+            for(Event event: eventCache){
+                if(event.getIdentifier() == id){
+                    return true;
+                }
             }
+        } else{
+            System.out.println("Event Cache is empty");
         }
+
         return false;
     }
 }

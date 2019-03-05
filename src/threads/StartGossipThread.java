@@ -43,7 +43,7 @@ public class StartGossipThread extends Thread {
         }
     }
 
-    private void startGossipRound() {
+    private void startGossipRound() throws InterruptedException {
         // choose a random pattern from the subscription table
         if (Dispatcher.getSubscriptionTable().isEmpty()) {
             System.out.println("Subscription Table is empty, so aborting gossip round.");
@@ -54,11 +54,16 @@ public class StartGossipThread extends Thread {
 
         Digest digest = new Digest();
 
-        for (Event e : Dispatcher.getEventCache()) {
-            if (e.getPattern().equals(selectedPattern)) {
-                digest.addEvent(e);
+        if(Dispatcher.getEventCache().size() > 0){
+            for (Event e : Dispatcher.getEventCache()) {
+                if (e.getPattern().equals(selectedPattern)) {
+                    digest.addEvent(e);
+                }
             }
+        } else{
+            System.out.println("Event Cache is empty");
         }
+
 
         GossipMessage gossipMessage = new GossipMessage("gossip message description", identifier, selectedPattern, digest);
 
