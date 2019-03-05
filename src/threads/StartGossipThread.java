@@ -64,7 +64,6 @@ public class StartGossipThread extends Thread {
             System.out.println("We caught an InterruptedException in start gossip thread.");
         }
 
-
             GossipMessage gossipMessage = new GossipMessage("gossip message description", dispatcher.getIdentifier(), selectedPattern, digest);
 
             Set<String> subscriberList = Dispatcher.getDispatcherListForPattern(selectedPattern);
@@ -86,4 +85,4 @@ public class StartGossipThread extends Thread {
 
         }
     }
-}
+
