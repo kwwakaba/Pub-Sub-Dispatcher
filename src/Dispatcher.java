@@ -99,9 +99,16 @@ public class Dispatcher {
             mutex.release();
         }
 	}
-	
-	public LinkedList<Event> getEventCache() {
-	    return eventCache;
+
+	public LinkedList<Event> getEventCache() throws InterruptedException{
+
+		LinkedList<Event> returnList = null;
+		if(mutex.tryAcquire(2000, TimeUnit.MILLISECONDS)) {
+			returnList = eventCache;
+			mutex.release();
+		}
+
+		return returnList;
 	}
 
     public DatagramSocket getSendSocket() throws InterruptedException {
