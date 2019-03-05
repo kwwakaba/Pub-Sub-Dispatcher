@@ -92,8 +92,15 @@ public class Dispatcher {
         }
 	}
 	
-	public static LinkedList<Event> getEventCache() {
-		return eventCache;
+	public static LinkedList<Event> getEventCache() throws InterruptedException{
+
+		LinkedList<Event> returnList = null;
+		if(mutex.tryAcquire(2000, TimeUnit.MILLISECONDS)) {
+			returnList = eventCache;
+			mutex.release();
+		}
+
+		return returnList;
 	}
 
 /*    *//**
