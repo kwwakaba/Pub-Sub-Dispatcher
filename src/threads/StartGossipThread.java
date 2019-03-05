@@ -56,14 +56,13 @@ public class StartGossipThread extends Thread {
             for (Event e : dispatcher.getEventCache()) {
                 if (e.getPattern().equals(selectedPattern)) {
                     digest.addEvent(e);
-                    System.out.println("Event id:" + e.getIdentifier() +" found that matched pattern: "
+                    System.out.println("Event id:" + e.getIdentifier() + " found that matched pattern: "
                             + selectedPattern);
                 }
             }
         } catch (InterruptedException e) {
             System.out.println("We caught an InterruptedException in start gossip thread.");
         }
-
 
         GossipMessage gossipMessage = new GossipMessage("gossip message description", dispatcher.getIdentifier(), selectedPattern, digest);
 
@@ -86,3 +85,4 @@ public class StartGossipThread extends Thread {
 
     }
 }
+
