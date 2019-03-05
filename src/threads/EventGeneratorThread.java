@@ -46,7 +46,6 @@ public class EventGeneratorThread extends Thread {
         int counter = 1;
         while (true) {
 
-
             try {
                 // generates a random sleep time between MIN_BOUND_SLEEP to MAX_BOUND_SLEEP
                 randomTimeToSleep = (int)(Math.random() * (MAX_BOUND_SLEEP - MIN_BOUND_SLEEP) + MIN_BOUND_SLEEP);

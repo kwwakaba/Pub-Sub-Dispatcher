@@ -65,25 +65,24 @@ public class StartGossipThread extends Thread {
         }
 
 
-            GossipMessage gossipMessage = new GossipMessage("gossip message description", dispatcher.getIdentifier(), selectedPattern, digest);
+        GossipMessage gossipMessage = new GossipMessage("gossip message description", dispatcher.getIdentifier(), selectedPattern, digest);
 
-            Set<String> subscriberList = Dispatcher.getDispatcherListForPattern(selectedPattern);
-            byte[] data;
-            try {
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                ObjectOutputStream oos = new ObjectOutputStream(baos);
-                oos.writeObject(gossipMessage);
-                data = baos.toByteArray();
-                DatagramSocket serverSocket = dispatcher.getSendSocket(); //new DatagramSocket(dispatcher.getPortNumber());
-                for (String dispatcherID : subscriberList) {
-                    Dispatcher subDispatcher = dispatcher.getNeighbors().stream().filter(x -> dispatcherID.equals(x.getIdentifier())).findFirst().orElse(null);
-                    serverSocket.send(new DatagramPacket(data, data.length, subDispatcher.getIpAddress(), subDispatcher.getPortNumber()));
-                }
-            } catch (Exception e) {
-                System.out.println("Something went wrong with startGossipRound(). ");
-                e.printStackTrace();
+        Set<String> subscriberList = Dispatcher.getDispatcherListForPattern(selectedPattern);
+        byte[] data;
+        try {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ObjectOutputStream oos = new ObjectOutputStream(baos);
+            oos.writeObject(gossipMessage);
+            data = baos.toByteArray();
+            DatagramSocket serverSocket = dispatcher.getSendSocket(); //new DatagramSocket(dispatcher.getPortNumber());
+            for (String dispatcherID : subscriberList) {
+                Dispatcher subDispatcher = dispatcher.getNeighbors().stream().filter(x -> dispatcherID.equals(x.getIdentifier())).findFirst().orElse(null);
+                serverSocket.send(new DatagramPacket(data, data.length, subDispatcher.getIpAddress(), subDispatcher.getPortNumber()));
             }
-
+        } catch (Exception e) {
+            System.out.println("Something went wrong with startGossipRound(). ");
+            e.printStackTrace();
         }
+
     }
 }
