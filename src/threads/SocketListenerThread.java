@@ -1,5 +1,6 @@
 package src.threads;
 
+import src.Dispatcher;
 import src.Message;
 
 import java.io.ByteArrayInputStream;
@@ -15,20 +16,28 @@ import java.net.DatagramSocket;
  */
 public class SocketListenerThread extends Thread {
 
+    Dispatcher dispatcher;
+
+    public void setup(Dispatcher dispatcher) {
+        this.dispatcher = dispatcher;
+    }
+
     public void run() {
         try {
             //Open the socket and listen for messsages.
             // https://systembash.com/a-simple-java-udp-server-and-udp-client/
-            int portNumber = 9876;
             System.out.println("Socket Listener Thread started. \n");
-            System.out.println("SocketListenerThread: Listening to socket at port " + portNumber);
+            System.out.println("SocketListenerThread: Listening to socket at port " + dispatcher.getPortNumber()
+                + "for dispatcher " + dispatcher.getIdentifier());
 
-            DatagramSocket serverSocket = new DatagramSocket(portNumber);
+            DatagramSocket serverSocket = new DatagramSocket(dispatcher.getPortNumber());
 
             while (true) {
                 byte[] receiveData = new byte[1024];
                 DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
                 serverSocket.receive(receivePacket);
+
+                System.out.println("A message has been received on dispatcher " + dispatcher.getIdentifier());
 
                 //Try to parse the data received into a Message
                 byte[] data = receivePacket.getData();
@@ -36,14 +45,16 @@ public class SocketListenerThread extends Thread {
                 ObjectInputStream is = new ObjectInputStream(in);
                 Message message = null;
                 try {
-                    message = (Message) is.readObject();
+                    message = (Message)is.readObject();
 
                 } catch (ClassNotFoundException e) {
+                    System.out.println("Something went wrong in the socket listener thread dispatcherID: "
+                    + dispatcher.getIdentifier() + "\n");
                     e.printStackTrace();
                 }
 
                 if (message != null) {
-                    MessageHandlerThread messageParserThread = new MessageHandlerThread(receivePacket, message);
+                    MessageHandlerThread messageParserThread = new MessageHandlerThread(receivePacket, message, dispatcher);
                     messageParserThread.start();
                 }
             }

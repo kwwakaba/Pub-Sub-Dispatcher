@@ -23,17 +23,13 @@ public class EventGeneratorThread extends Thread {
 	private int randomTimeToSleep;
 
 	// stores information about the Dispatcher that started this Thread to generate Events
-	private String identifier, ipAddress;
-	private int portNumber;
+	private Dispatcher dispatcher;
 
 	// predefined set of possible patterns (this may be needed in other Threads/Classes as well!)
 	ArrayList<String> possiblePatterns;
 
-	public void setup(String identifier, String ipAddress, int portNumber) {
-		this.identifier = identifier;
-		this.ipAddress = ipAddress;
-		this.portNumber = portNumber;
-
+	public void setup(Dispatcher dispatcher) {
+		this.dispatcher = dispatcher;
 		initializePossiblePatterns();
 	}
 
@@ -57,17 +53,13 @@ public class EventGeneratorThread extends Thread {
 
                 // generate a random Event to add to Dispatcher's cache
                 String identifier = "Event " + counter;
-                String description = "Dispatcher '" + identifier + "' with IP '" + ipAddress + "' and port " + portNumber;
+                String description = "Dispatcher '" + identifier + "' with IP '" + dispatcher.getIpAddress().getHostAddress() + "' and port " + dispatcher.getPortNumber();
                 // chooses a random pattern from the list of possible patterns
                 String pattern = possiblePatterns.get((int)(Math.random() * possiblePatterns.size()));
 
                 Event newEvent = new Event(identifier, description, pattern);
 
-                // I don't think we need the following line because addEvent() in Dispatcher already has this...
-                /*if (mutex.tryAcquire()) {
-
-                }*/
-                Dispatcher.addEventToCache(newEvent);
+                dispatcher.addEventToCache(newEvent);
 
                 counter++;
             } catch (Exception e) {

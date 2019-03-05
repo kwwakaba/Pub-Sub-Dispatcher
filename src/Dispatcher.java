@@ -1,11 +1,12 @@
 package src;
 
 import src.threads.EventGeneratorThread;
+import src.threads.SocketListenerThread;
 import src.threads.StartGossipThread;
 
+import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.util.HashMap;
-import java.util.LinkedList;
+import java.util.*;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
@@ -13,12 +14,14 @@ public class Dispatcher {
 
 	// MARK: - Instance Variable
 	private static Semaphore mutex = new Semaphore(1);
+	private static Semaphore portMutex = new Semaphore(1);
 	private String identifier;
 	private InetAddress ipAddress;
 	private int portNumber;
 
-	private static LinkedList<Dispatcher> neighborTable = new LinkedList<>();
+	private DatagramSocket sendSocket;
 
+	private static LinkedList<Dispatcher> neighborTable = new LinkedList<>();
 	static {
 	    try {
 
@@ -27,14 +30,29 @@ public class Dispatcher {
             neighborTable.add(new Dispatcher("3", InetAddress.getByName("127.0.0.1"), 9578));
 
         } catch (Exception e) {
-
+            System.out.println("Something went wrong creating the neighbor table");
         }
 
     }
-	private static HashMap<String, LinkedList<Dispatcher>> subscriptionTable; //Should this be pattern -> List of distributors?
+
+    //Key is Pattern ID.
+    //Value is Set of Dispatcher IDs subscribed to that pattern.
+	private static HashMap<String, Set<String>> subscriptionTable = new HashMap<>();
+	static {
+        subscriptionTable.put("Pattern 0", new HashSet(Arrays.asList("1", "2")));
+        subscriptionTable.put("Pattern 1", new HashSet(Arrays.asList("1", "3")));
+        subscriptionTable.put("Pattern 2", new HashSet(Arrays.asList("2", "3")));
+        subscriptionTable.put("Pattern 3", new HashSet(Arrays.asList("1", "2")));
+        subscriptionTable.put("Pattern 4", new HashSet(Arrays.asList("3", "2")));
+        subscriptionTable.put("Pattern 5", new HashSet(Arrays.asList("1", "2", "3")));
+        subscriptionTable.put("Pattern 6", new HashSet());
+        subscriptionTable.put("Pattern 7", new HashSet(Arrays.asList("1", "2")));
+        subscriptionTable.put("Pattern 8", new HashSet(Arrays.asList("1", "3")));
+        subscriptionTable.put("Pattern 9", new HashSet(Arrays.asList("3", "2")));
+    }
 
 	/** Event cache needs to be protected by a mutex, since multiple threads will be reading/writing to the cache.*/
-	private static LinkedList<Event> eventCache;
+	private LinkedList<Event> eventCache;
 	
 	// MARK: - Constructor
 	
@@ -42,8 +60,12 @@ public class Dispatcher {
 		this.identifier = identifier;
 		this.ipAddress = ipAddress;
 		this.portNumber = portNumber;
+		try {
+            this.sendSocket = new DatagramSocket(portNumber);
+        } catch (Exception e) {
+		    System.out.println("Something went wrong trying to create the port. ");
+        }
 
-		subscriptionTable = new HashMap<>();
 		eventCache = new LinkedList<>();
 	}
 
@@ -58,78 +80,39 @@ public class Dispatcher {
 	public int getPortNumber() {
 		return portNumber;
 	}
-	
-
-	public void addNeighbor(Dispatcher d) {
-        neighborTable.push(d);
-    }
 
 	public static LinkedList<Dispatcher> getNeighbors() {
 		return neighborTable;
 	}
 
-	public static HashMap<String, LinkedList<Dispatcher>> getSubscriptionTable() {
+	public static HashMap<String, Set<String>> getSubscriptionTable() {
 		return subscriptionTable;
 	}
 	
-	public static void addSubscription(String pattern, LinkedList<Dispatcher> dispatcherList) {
-		subscriptionTable.put(pattern, dispatcherList);
-	}
-	
-	public static void addDispatcherToListWithPattern(Dispatcher d, String pattern) {
-		subscriptionTable.get(pattern).add(d);
-	}
-	
-	public static LinkedList<Dispatcher> getDispatcherListForPattern(String pattern) {
+	public static Set<String> getDispatcherListForPattern(String pattern) {
 		return subscriptionTable.get(pattern);
 	}
 
-	public static void addEventToCache(Event e) throws InterruptedException {
-
+	public void addEventToCache(Event e) throws InterruptedException {
 		if(mutex.tryAcquire(2000, TimeUnit.MILLISECONDS)) {
             eventCache.add(e);
             mutex.release();
         }
 	}
 	
-	public static LinkedList<Event> getEventCache() {
-		return eventCache;
+	public LinkedList<Event> getEventCache() {
+	    return eventCache;
 	}
 
-/*    *//**
-     * Reads in the information about the other dispatchers in the network to create the subscription
-     * table.
-     *//*
-	public void createSubscriptionTable() {
-
-	    try {
-            File file =
-                    new File(System.getProperty("user.dir") + "/neighborsConfig.txt");
-            System.out.println(file.getAbsolutePath());
-            Scanner sc = new Scanner(file);
-
-            List<Dispatcher> dispatcherList = new LinkedList<Dispatcher>();
-            while (sc.hasNextLine()) {
-                String line = sc.nextLine();
-                System.out.println(line);
-                String parsed[] = line.split(";");
-
-                InetAddress inetAddress = InetAddress.getByName(parsed[1]);
-                Dispatcher dispatcher = new Dispatcher(parsed[0], inetAddress, Integer.parseInt(parsed[2]));
-                if (!inetAddress.getHostAddress().equals(this.getIpAddress().getHostAddress())) {
-                    dispatcherList.add(dispatcher);
-                }
-            }
-
-        } catch (Exception e) {
-	        System.out.println("Something went wrong trying to create the subscription table. \n"
-                    + e.getStackTrace());
+    public DatagramSocket getSendSocket() throws InterruptedException {
+        if(portMutex.tryAcquire(2000, TimeUnit.MILLISECONDS)) {
+            portMutex.release();
+            return sendSocket;
         }
+        return null;
+    }
 
-    }*/
-
-
-	public static void main(String[] args)
+    public static void main(String[] args)
 	{
 
 	    //Get the IPAddresss of our local machine.
@@ -148,15 +131,17 @@ public class Dispatcher {
 
         // Starts the thread that wakes up randomly to push gossip messages across the network.
         StartGossipThread startGossipThread = new StartGossipThread();
-        startGossipThread.setup(dispatcher.getIdentifier());
         startGossipThread.setup(dispatcher);
 	    startGossipThread.start();
 
         // Starts the thread that puts stuff into the Event Cache. Should be started after
         // Dispatcher initialization since this tries to reference the EventCache.
         EventGeneratorThread eventGeneratorThread = new EventGeneratorThread();
-        eventGeneratorThread.setup(dispatcher.getIdentifier(), dispatcher.getIpAddress().toString(), dispatcher.getPortNumber());
+        eventGeneratorThread.setup(dispatcher);
         eventGeneratorThread.start();
+
+        SocketListenerThread socketListenerThread = new SocketListenerThread();
+        socketListenerThread.setup(dispatcher);
 
         System.out.println("Starting Dispatcher.");
 	}

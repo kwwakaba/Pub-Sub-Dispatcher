@@ -13,6 +13,7 @@ import java.io.ObjectOutputStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.util.LinkedList;
+import java.util.Set;
 
 
 /**
@@ -27,25 +28,24 @@ public class MessageHandlerThread extends Thread {
     /** The packet that was read from the socket. */
     DatagramPacket packet;
 
-
-
+    Dispatcher dispatcher;
 
     /** Constructor
      *
      * @param packet the unparsed string form of the message received on the socket.
      */
-    public MessageHandlerThread(DatagramPacket packet, Message message) {
+    public MessageHandlerThread(DatagramPacket packet, Message message, Dispatcher dispatcher) {
         this.packet = packet;
         this.message = message;
+        this.dispatcher = dispatcher;
     }
 
     public void handleEventResponseMessage(EventResponseMessage eventResponseMessage) {
         System.out.println("Handling event response message " + eventResponseMessage);
 
-        //TODO - Extract the events from message and add the events to the cache.
         try{
             for(Event event: eventResponseMessage.getEvents()){
-                Dispatcher.addEventToCache(event);
+                dispatcher.addEventToCache(event);
             }
         }catch (Exception e){
             System.out.println("Error occurred trying to populate cache from response message. " + e.getStackTrace());
@@ -58,7 +58,7 @@ public class MessageHandlerThread extends Thread {
         System.out.println("Handling request message. " + requestMessage);
 
         LinkedList<Event> eventList = requestMessage.getEventList();
-        LinkedList<Event> eventCache = Dispatcher.getEventCache();
+        LinkedList<Event> eventCache = dispatcher.getEventCache();
         LinkedList<Event> eventResponseList = new LinkedList<>();
 
         byte[] data;
@@ -75,7 +75,7 @@ public class MessageHandlerThread extends Thread {
             data = baos.toByteArray();
 
             packet.setData(data);
-            DatagramSocket datagramSocket = new DatagramSocket();
+            DatagramSocket datagramSocket = dispatcher.getSendSocket(); //new DatagramSocket();
             datagramSocket.send(packet);
 
         } catch (Exception e){
@@ -85,10 +85,11 @@ public class MessageHandlerThread extends Thread {
 
     public void handleGossipMessage(GossipMessage gossipMessage) {
         System.out.println("Handling gossip message" + gossipMessage);
-        LinkedList<Dispatcher> dispatcherList = Dispatcher.getDispatcherListForPattern(gossipMessage.getPattern());
+
+        Set<String> dispatcherList = dispatcher.getDispatcherListForPattern(gossipMessage.getPattern());
 
         //Checking to see if self is subscribed to pattern
-        if(dispatcherList.contains(this)){
+        if(dispatcherList.contains(dispatcher.getIdentifier())){
             RequestMessage reqMsg = new RequestMessage();
             Digest digest = gossipMessage.getDigest();
             LinkedList<Event> eventList = digest.getEventList();
@@ -138,7 +139,7 @@ public class MessageHandlerThread extends Thread {
             byte[] reqData = getDataByteArray(message);
 
             packet.setData(reqData);
-            DatagramSocket datagramSocket = new DatagramSocket();
+            DatagramSocket datagramSocket = dispatcher.getSendSocket();//new DatagramSocket();
             datagramSocket.send(packet);
         }catch (Exception e){
             System.out.println("Something went wrong trying to sendDispatcherMessage. " + e.getStackTrace());
@@ -189,7 +190,7 @@ public class MessageHandlerThread extends Thread {
 
     /**  returns true if the dispatcher received an event with the given id **/
     public boolean isReceived(String id){
-        LinkedList<Event> eventCache = Dispatcher.getEventCache(); // Will Fix
+        LinkedList<Event> eventCache = dispatcher.getEventCache(); // Will Fix
 
         for(Event event: eventCache){
             if(event.getIdentifier() == id){
