@@ -54,7 +54,7 @@ public class MessageHandlerThread extends Thread {
 
     }
 
-    public void handleRequestMessage(RequestMessage requestMessage) {
+    public void handleRequestMessage(RequestMessage requestMessage) throws InterruptedException {
         System.out.println("Handling request message. " + requestMessage);
 
         LinkedList<Event> eventList = requestMessage.getEventList();
@@ -83,7 +83,7 @@ public class MessageHandlerThread extends Thread {
         }
     }
 
-    public void handleGossipMessage(GossipMessage gossipMessage) {
+    public void handleGossipMessage(GossipMessage gossipMessage) throws InterruptedException {
         System.out.println("Handling gossip message" + gossipMessage);
         LinkedList<Dispatcher> dispatcherList = Dispatcher.getDispatcherListForPattern(gossipMessage.getPattern());
 
@@ -161,34 +161,40 @@ public class MessageHandlerThread extends Thread {
 
     public void run() {
 
-        // Call appropriate handler.
-        if (message instanceof EventResponseMessage) {
-            System.out.println("EventResponseMessage received. \n");
+        try{
 
-            //No response needed, processing events in response to a request.
-            EventResponseMessage eventResponseMessage = (EventResponseMessage) message;
-            handleEventResponseMessage(eventResponseMessage);
+            // Call appropriate handler.
+            if (message instanceof EventResponseMessage) {
+                System.out.println("EventResponseMessage received. \n");
 
-        } else if (message instanceof RequestMessage) {
-            System.out.println("RequestMessage received. \n");
+                //No response needed, processing events in response to a request.
+                EventResponseMessage eventResponseMessage = (EventResponseMessage) message;
+                handleEventResponseMessage(eventResponseMessage);
 
-            RequestMessage requestMessage = (RequestMessage) message;
-            handleRequestMessage(requestMessage);
-            sendMessage();
-        } else if (message instanceof GossipMessage) {
-            System.out.println("GossipMessage received. \n");
+            } else if (message instanceof RequestMessage) {
+                System.out.println("RequestMessage received. \n");
 
-            GossipMessage gossipMessage = (GossipMessage) message;
-            handleGossipMessage(gossipMessage);
-            sendMessage();
-        } else {
-            System.out.println("Something went wrong and we received a message we didn't understand. \n");
-         }
+                RequestMessage requestMessage = (RequestMessage) message;
+                handleRequestMessage(requestMessage);
+                sendMessage();
+            } else if (message instanceof GossipMessage) {
+                System.out.println("GossipMessage received. \n");
+
+                GossipMessage gossipMessage = (GossipMessage) message;
+                handleGossipMessage(gossipMessage);
+                sendMessage();
+            } else {
+                System.out.println("Something went wrong and we received a message we didn't understand. \n");
+            }
+
+        }catch (Exception e){
+            System.out.println("Issue in the MessageHandlerThread run(). " + e.getStackTrace());
+        }
 
     }
 
     /**  returns true if the dispatcher received an event with the given id **/
-    public boolean isReceived(String id){
+    public boolean isReceived(String id) throws InterruptedException {
         LinkedList<Event> eventCache = Dispatcher.getEventCache(); // Will Fix
 
         for(Event event: eventCache){
