@@ -25,9 +25,9 @@ public class Dispatcher {
 	static {
 	    try {
 
-            neighborTable.add(new Dispatcher("1", InetAddress.getByName("127.0.0.1"), 9576));
-            neighborTable.add(new Dispatcher("2", InetAddress.getByName("127.0.0.1"), 9577));
-            neighborTable.add(new Dispatcher("3", InetAddress.getByName("127.0.0.1"), 9578));
+            neighborTable.add(new Dispatcher("1", InetAddress.getByName("172.20.205.223"), 9576));
+            neighborTable.add(new Dispatcher("2", InetAddress.getByName("172.20.195.2"), 9577));
+            neighborTable.add(new Dispatcher("3", InetAddress.getByName("172.20.203.194"), 9578));
 
         } catch (Exception e) {
             System.out.println("Something went wrong creating the neighbor table");
