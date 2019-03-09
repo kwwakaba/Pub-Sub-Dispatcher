@@ -41,7 +41,6 @@ public class EventGeneratorThread extends Thread {
 	}
 
     public void run() {
-        // mutex = new Semaphore(1);
 
         int counter = 1;
         while (true) {

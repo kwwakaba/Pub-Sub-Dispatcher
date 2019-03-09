@@ -14,7 +14,7 @@ public class Dispatcher {
 
 	// MARK: - Instance Variable
 	private static Semaphore mutex = new Semaphore(1);
-	private static Semaphore portMutex = new Semaphore(1);
+
 	private String identifier;
 	private InetAddress ipAddress;
 	private int portNumber;
@@ -60,10 +60,14 @@ public class Dispatcher {
 		this.identifier = identifier;
 		this.ipAddress = ipAddress;
 		this.portNumber = portNumber;
-		try {
-            this.sendSocket = new DatagramSocket(portNumber);
+
+        int identifyPort = new Random().nextInt(100);
+        try {
+            this.sendSocket = new DatagramSocket(9579 + identifyPort);
+            System.out.println("All messages sent by Dispatcher id: " + identifier + " out on port " + identifyPort);
         } catch (Exception e) {
-		    System.out.println("Something went wrong trying to create the port. ");
+		    System.out.println("Something went wrong trying to create the port for dispatcher id: " + identifier);
+		    e.printStackTrace();
         }
 
 		eventCache = new LinkedList<>();
@@ -112,11 +116,7 @@ public class Dispatcher {
 	}
 
     public DatagramSocket getSendSocket() throws InterruptedException {
-        if(portMutex.tryAcquire(2000, TimeUnit.MILLISECONDS)) {
-            portMutex.release();
             return sendSocket;
-        }
-        return null;
     }
 
     public static void main(String[] args)
@@ -133,7 +133,7 @@ public class Dispatcher {
         }
 
         // Creates the one instance of the dispatcher.
-        Dispatcher dispatcher = new Dispatcher("IDENTIFIER", ipAddress, 9573);
+        Dispatcher dispatcher = new Dispatcher("IDENTIFIER", ipAddress, 9578);
 	    System.out.println("Dispatcher neighbor table size: " + dispatcher.getNeighbors().size());
 
         // Starts the thread that wakes up randomly to push gossip messages across the network.

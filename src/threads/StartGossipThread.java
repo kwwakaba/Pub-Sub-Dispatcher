@@ -66,17 +66,24 @@ public class StartGossipThread extends Thread {
 
         GossipMessage gossipMessage = new GossipMessage("gossip message description", dispatcher.getIdentifier(), selectedPattern, digest);
 
-        Set<String> subscriberList = Dispatcher.getDispatcherListForPattern(selectedPattern);
+        Set<String> subscriberList = dispatcher.getDispatcherListForPattern(selectedPattern);
         byte[] data;
         try {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             ObjectOutputStream oos = new ObjectOutputStream(baos);
             oos.writeObject(gossipMessage);
             data = baos.toByteArray();
-            DatagramSocket serverSocket = dispatcher.getSendSocket(); //new DatagramSocket(dispatcher.getPortNumber());
+            DatagramSocket serverSocket = dispatcher.getSendSocket();
+
             for (String dispatcherID : subscriberList) {
                 Dispatcher subDispatcher = dispatcher.getNeighbors().stream().filter(x -> dispatcherID.equals(x.getIdentifier())).findFirst().orElse(null);
-                serverSocket.send(new DatagramPacket(data, data.length, subDispatcher.getIpAddress(), subDispatcher.getPortNumber()));
+                if (subDispatcher != null && data != null
+                        && data.length > 0) {
+                    DatagramPacket sendMe = new DatagramPacket(data, data.length, subDispatcher.getIpAddress(), subDispatcher.getPortNumber());
+                    serverSocket.send(sendMe);
+                } else {
+                    System.out.println("Dispatcher or data was null.");
+                }
             }
         } catch (Exception e) {
             System.out.println("Something went wrong with startGossipRound(). ");
