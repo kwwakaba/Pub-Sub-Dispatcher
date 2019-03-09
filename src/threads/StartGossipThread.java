@@ -65,6 +65,7 @@ public class StartGossipThread extends Thread {
         }
 
         GossipMessage gossipMessage = new GossipMessage("gossip message description", dispatcher.getIdentifier(), selectedPattern, digest);
+	System.out.println("About to send gossipMessage: " + gossipMessage);
 
         Set<String> subscriberList = dispatcher.getDispatcherListForPattern(selectedPattern);
         byte[] data;

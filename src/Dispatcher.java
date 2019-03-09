@@ -41,7 +41,7 @@ public class Dispatcher {
 	private static HashMap<String, Set<String>> subscriptionTable = new HashMap<>();
 	static {
         subscriptionTable.put("Pattern 0", new HashSet(Arrays.asList("1", "2")));
-        subscriptionTable.put("Pattern 1", new HashSet(Arrays.asList("1", "3")));
+        /*subscriptionTable.put("Pattern 1", new HashSet(Arrays.asList("1", "3")));
         subscriptionTable.put("Pattern 2", new HashSet(Arrays.asList("2", "3")));
         subscriptionTable.put("Pattern 3", new HashSet(Arrays.asList("1", "2")));
         subscriptionTable.put("Pattern 4", new HashSet(Arrays.asList("3", "2")));
@@ -49,7 +49,7 @@ public class Dispatcher {
         subscriptionTable.put("Pattern 6", new HashSet());
         subscriptionTable.put("Pattern 7", new HashSet(Arrays.asList("1", "2")));
         subscriptionTable.put("Pattern 8", new HashSet(Arrays.asList("1", "3")));
-        subscriptionTable.put("Pattern 9", new HashSet(Arrays.asList("3", "2")));
+        subscriptionTable.put("Pattern 9", new HashSet(Arrays.asList("3", "2")));*/
     }
 
 	/** Event cache needs to be protected by a mutex, since multiple threads will be reading/writing to the cache.*/
