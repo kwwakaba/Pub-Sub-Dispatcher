@@ -134,7 +134,7 @@ public class Dispatcher {
         }
 
         // Creates the one instance of the dispatcher.
-        Dispatcher dispatcher = new Dispatcher("IDENTIFIER", ipAddress, 9578);
+        Dispatcher dispatcher = new Dispatcher("1", ipAddress, 9576);
 	    System.out.println("Dispatcher neighbor table size: " + dispatcher.getNeighbors().size());
 
         // Starts the thread that wakes up randomly to push gossip messages across the network.

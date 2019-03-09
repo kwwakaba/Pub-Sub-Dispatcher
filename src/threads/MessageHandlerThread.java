@@ -113,10 +113,12 @@ public class MessageHandlerThread extends Thread {
             for(Dispatcher dispatcher: Dispatcher.getNeighbors()){
                 try{
                     byte[] data = getDataByteArray(reqMsg);
-                    DatagramSocket serverSocket = new DatagramSocket(packet.getPort());
+                    // DatagramSocket serverSocket = new DatagramSocket(packet.getPort());
+                    DatagramSocket serverSocket = dispatcher.getSendSocket();
                     serverSocket.send(new DatagramPacket(data, data.length, dispatcher.getIpAddress(), dispatcher.getPortNumber()));
                 } catch (Exception e){
                     System.out.println("Something went wrong trying to send handleGossipMessage. " + e.getStackTrace());
+                    e.printStackTrace();
                 }
             }
         }
@@ -157,7 +159,8 @@ public class MessageHandlerThread extends Thread {
             byte[] data = getDataByteArray(message);
 
             //Send data
-            DatagramSocket serverSocket = new DatagramSocket(packet.getPort());
+            // DatagramSocket serverSocket = new DatagramSocket(packet.getPort());
+            DatagramSocket serverSocket = dispatcher.getSendSocket();
             serverSocket.send(new DatagramPacket(data, data.length, packet.getAddress(), packet.getPort()));
         } catch (Exception e) {
             System.out.println("Something went wrong trying to sendMessage. " + e.getStackTrace());
