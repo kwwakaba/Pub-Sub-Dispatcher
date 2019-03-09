@@ -26,4 +26,13 @@ public class EventResponseMessage extends Message implements Serializable {
         return events;
     }
 
+	@Override
+	public String toString() {
+		String str = "EventList in EventResponseMessage (with source node id: " + getSourceNodeId() + "):";
+		for (int i = 0; i < eventList.size(); i++) {
+			str += ("\n\tEvent " + i + ": " + eventList.get(i));
+		}
+		return str;
+	}
+
 }

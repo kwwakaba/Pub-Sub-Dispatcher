@@ -37,4 +37,13 @@ public class RequestMessage extends Message implements Serializable {
 		return eventList;
 	}
 	
+	@Override
+	public String toString() {
+		String str = "EventList in RequestMessage (with source node id: " + getSourceNodeId() + "):";
+		for (int i = 0; i < eventList.size(); i++) {
+			str += ("\n\tEvent " + i + ": " + eventList.get(i));
+		}
+		return str;
+	}
+	
 }

@@ -37,7 +37,7 @@ public class GossipMessage extends Message implements Serializable {
 	
 	@Override
 	public String toString() {
-		return String.format("Message: description = " + getDescription() + " dispatcherIdentifier = " + dispatcherIdentifier + " pattern: " + pattern + " digest: " + digest);
+		return String.format("GossipMessage: description = " + getDescription() + " dispatcherIdentifier = " + dispatcherIdentifier + " pattern: " + pattern + " digest: " + digest);
 	}
 	
 }
