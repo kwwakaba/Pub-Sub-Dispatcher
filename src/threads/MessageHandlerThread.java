@@ -108,20 +108,22 @@ public class MessageHandlerThread extends Thread {
             if(reqMsg.getEventList().size() != 0){
                 sendDispatcherMessage(reqMsg);
             }
-
-            //Send request message to neighbors
-            for(Dispatcher dispatcher: Dispatcher.getNeighbors()){
-                try{
+        }
+	
+	//Send request message to neighbors
+        for(Dispatcher d: Dispatcher.getNeighbors()){
+		// skips this dispatcher (prevents sending message to self!)
+                if (d.getIdentifier().equals(dispatcher.getIdentifier())) { continue; }
+               try{
                     byte[] data = getDataByteArray(reqMsg);
                     // DatagramSocket serverSocket = new DatagramSocket(packet.getPort());
                     DatagramSocket serverSocket = dispatcher.getSendSocket();
-                    serverSocket.send(new DatagramPacket(data, data.length, dispatcher.getIpAddress(), dispatcher.getPortNumber()));
+                    serverSocket.send(new DatagramPacket(data, data.length, d.getIpAddress(), d.getPortNumber()));
                 } catch (Exception e){
                     System.out.println("Something went wrong trying to send handleGossipMessage. " + e.getStackTrace());
                     e.printStackTrace();
                 }
-            }
-        }
+         }
     }
 
     public byte[] getDataByteArray(Message message){
