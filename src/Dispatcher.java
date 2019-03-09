@@ -75,7 +75,7 @@ public class Dispatcher {
             done = true;
         } catch (Exception e) {
 		    System.out.println("Something went wrong trying to create the port for dispatcher id: " + identifier);
-		    e.printStackTrace();
+		    // e.printStackTrace();
         }
 	}	// end while
 
