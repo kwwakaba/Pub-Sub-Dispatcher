@@ -62,14 +62,18 @@ public class Dispatcher {
 		this.ipAddress = ipAddress;
 		this.portNumber = portNumber;
 
-        int identifyPort = new Random().nextInt(100);
+        boolean done = false;
+	while (!done) {
+	int identifyPort = new Random().nextInt(100);
         try {
             this.sendSocket = new DatagramSocket(9579 + identifyPort);
             System.out.println("All messages sent by Dispatcher id: " + identifier + " out on port " + identifyPort);
+            done = true;
         } catch (Exception e) {
 		    System.out.println("Something went wrong trying to create the port for dispatcher id: " + identifier);
 		    e.printStackTrace();
         }
+	}	// end while
 
 		eventCache = new LinkedList<>();
 	}
