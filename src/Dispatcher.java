@@ -31,7 +31,7 @@ public class Dispatcher {
 
             neighborTable.add(new Dispatcher("1", InetAddress.getByName("129.210.16.138"), 9576));
             neighborTable.add(new Dispatcher("2", InetAddress.getByName("129.210.16.143"), 9577));
-            neighborTable.add(new Dispatcher("3", InetAddress.getByName("129.210.16.140"), 9578));
+            neighborTable.add(new Dispatcher("3", InetAddress.getByName("129.210.16.144"), 9578));
 
         } catch (Exception e) {
             System.out.println("Something went wrong creating the neighbor table");
@@ -45,11 +45,11 @@ public class Dispatcher {
 	private static HashMap<String, Set<String>> subscriptionTable = new HashMap<>();
 	static {
         subscriptionTable.put("Pattern 0", new HashSet(Arrays.asList("1", "2")));
-        /*subscriptionTable.put("Pattern 1", new HashSet(Arrays.asList("1", "3")));
+        subscriptionTable.put("Pattern 1", new HashSet(Arrays.asList("1", "3")));
         subscriptionTable.put("Pattern 2", new HashSet(Arrays.asList("2", "3")));
         subscriptionTable.put("Pattern 3", new HashSet(Arrays.asList("1", "2")));
         subscriptionTable.put("Pattern 4", new HashSet(Arrays.asList("3", "2")));
-        subscriptionTable.put("Pattern 5", new HashSet(Arrays.asList("1", "2", "3")));
+        /*subscriptionTable.put("Pattern 5", new HashSet(Arrays.asList("1", "2", "3")));
         subscriptionTable.put("Pattern 6", new HashSet());
         subscriptionTable.put("Pattern 7", new HashSet(Arrays.asList("1", "2")));
         subscriptionTable.put("Pattern 8", new HashSet(Arrays.asList("1", "3")));

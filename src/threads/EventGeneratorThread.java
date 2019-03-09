@@ -16,7 +16,7 @@ public class EventGeneratorThread extends Thread {
 	private static final int MAX_BOUND_SLEEP = 10000;
 
 	// constant for number of random patterns to generate
-	private static final int NUM_PATTERNS = 1;
+	private static final int NUM_PATTERNS = 5;
 
 	// private static Semaphore mutex;
 
