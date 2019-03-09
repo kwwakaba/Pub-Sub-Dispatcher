@@ -80,7 +80,9 @@ public class StartGossipThread extends Thread {
                 if (subDispatcher != null && data != null
                         && data.length > 0) {
                     DatagramPacket sendMe = new DatagramPacket(data, data.length, subDispatcher.getIpAddress(), subDispatcher.getPortNumber());
+                    System.out.println("About to send message to " + dispatcherID);
                     serverSocket.send(sendMe);
+                    System.out.println("Sent message");
                 } else {
                     System.out.println("Dispatcher or data was null.");
                 }

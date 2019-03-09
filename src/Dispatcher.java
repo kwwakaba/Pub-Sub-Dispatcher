@@ -31,6 +31,7 @@ public class Dispatcher {
 
         } catch (Exception e) {
             System.out.println("Something went wrong creating the neighbor table");
+            System.out.println("Test log");
         }
 
     }
