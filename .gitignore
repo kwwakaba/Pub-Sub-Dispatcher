@@ -1,3 +1,7 @@
 .idea/
 out/
 Pub-Sub-Dispatcher.iml
+
+src/*.class
+src/messages/*.class
+src/threads/*.class
