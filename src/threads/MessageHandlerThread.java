@@ -117,8 +117,9 @@ public class MessageHandlerThread extends Thread {
                try{
                     byte[] data = getDataByteArray(gossipMessage);
                     // DatagramSocket serverSocket = new DatagramSocket(packet.getPort());
-                    DatagramSocket serverSocket = dispatcher.getSendSocket();
-                    serverSocket.send(new DatagramPacket(data, data.length, d.getIpAddress(), d.getPortNumber()));
+                    // DatagramSocket serverSocket = dispatcher.getSendSocket();
+                    // serverSocket.send(new DatagramPacket(data, data.length, d.getIpAddress(), d.getPortNumber()));
+			dispatcher.send(new DatagramPacket(data, data.length, d.getIpAddress(), d.getPortNumber()));
                 } catch (Exception e){
                     System.out.println("Something went wrong trying to send handleGossipMessage. " + e.getStackTrace());
                     e.printStackTrace();

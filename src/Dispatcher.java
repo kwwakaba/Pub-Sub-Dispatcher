@@ -4,6 +4,9 @@ import src.threads.EventGeneratorThread;
 import src.threads.SocketListenerThread;
 import src.threads.StartGossipThread;
 
+import java.io.IOException;
+import java.net.DatagramPacket;
+
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.util.*;
@@ -14,6 +17,7 @@ public class Dispatcher {
 
 	// MARK: - Instance Variable
 	private static Semaphore mutex = new Semaphore(1);
+	private static Semaphore socketMutex = new Semaphore(1);
 
 	private String identifier;
 	private InetAddress ipAddress;
@@ -123,6 +127,12 @@ public class Dispatcher {
     public DatagramSocket getSendSocket() throws InterruptedException {
             return sendSocket;
     }
+
+	public void send(DatagramPacket packet) throws InterruptedException, IOException {
+		if (socketMutex.tryAcquire(2000, TimeUnit.MILLISECONDS)) {
+			sendSocket.send(packet);
+		}
+	}
 
     public static void main(String[] args)
 	{
