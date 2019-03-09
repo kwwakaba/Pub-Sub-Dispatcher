@@ -76,6 +76,8 @@ public class StartGossipThread extends Thread {
             DatagramSocket serverSocket = dispatcher.getSendSocket();
 
             for (String dispatcherID : subscriberList) {
+                // skips this dispatcher (prevents sending message to self!)
+                if (dispatcherID.equals(identifier)) { continue; }
                 Dispatcher subDispatcher = dispatcher.getNeighbors().stream().filter(x -> dispatcherID.equals(x.getIdentifier())).findFirst().orElse(null);
                 if (subDispatcher != null && data != null
                         && data.length > 0) {

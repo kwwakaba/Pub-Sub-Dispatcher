@@ -56,7 +56,7 @@ public class SocketListenerThread extends Thread {
                 if (message != null) {
                     MessageHandlerThread messageParserThread = new MessageHandlerThread(receivePacket, message, dispatcher);
                     messageParserThread.start();
-                }
+                } else { System.out.println("MessageHandlerThread not starting - MESSAGE IS NULL"); }
             }
 
         } catch (Exception e) {
