@@ -46,6 +46,7 @@ public class SocketListenerThread extends Thread {
                 Message message = null;
                 try {
                     message = (Message)is.readObject();
+                    System.out.println("Message received: " + message);
 
                 } catch (ClassNotFoundException e) {
                     System.out.println("Something went wrong in the socket listener thread dispatcherID: "

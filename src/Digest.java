@@ -25,4 +25,13 @@ public class Digest implements Serializable {
 		return eventList;
 	}
 	
+	@Override
+	public String toString() {
+		String str = "EventList in Digest:";
+		for (int i = 0; i < eventList.size(); i++) {
+			str += ("\n\tEvent " + i + ": " + eventList.get(i));
+		}
+		return str;
+	}
+	
 }

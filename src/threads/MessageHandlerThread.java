@@ -175,6 +175,7 @@ public class MessageHandlerThread extends Thread {
             // Call appropriate handler.
             if (message instanceof EventResponseMessage) {
                 System.out.println("EventResponseMessage received. \n");
+		System.out.println();
 
                 //No response needed, processing events in response to a request.
                 EventResponseMessage eventResponseMessage = (EventResponseMessage) message;
