@@ -133,7 +133,7 @@ public class MessageHandlerThread extends Thread {
             oos.writeObject(message);
             data = baos.toByteArray();
 
-            System.out.println("Successfully serialized the data to a byte array.");
+            // System.out.println("Successfully serialized the data to a byte array.");
 
         }catch (Exception e){
             System.out.println("Something went wrong trying to get data byte array. " + e.getStackTrace());
