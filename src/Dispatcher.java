@@ -27,7 +27,7 @@ public class Dispatcher {
 
             neighborTable.add(new Dispatcher("1", InetAddress.getByName("129.210.16.138"), 9576));
             neighborTable.add(new Dispatcher("2", InetAddress.getByName("129.210.16.143"), 9577));
-            // neighborTable.add(new Dispatcher("3", InetAddress.getByName("172.20.203.194"), 9578));
+            neighborTable.add(new Dispatcher("3", InetAddress.getByName("129.210.16.140"), 9578));
 
         } catch (Exception e) {
             System.out.println("Something went wrong creating the neighbor table");
