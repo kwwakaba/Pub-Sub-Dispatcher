@@ -150,6 +150,7 @@ public class Dispatcher {
 
         SocketListenerThread socketListenerThread = new SocketListenerThread();
         socketListenerThread.setup(dispatcher);
+        socketListenerThread.start();
 
         System.out.println("Starting Dispatcher.");
 	}
