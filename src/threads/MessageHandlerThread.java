@@ -91,6 +91,7 @@ public class MessageHandlerThread extends Thread {
         //Checking to see if self is subscribed to pattern
         if(dispatcherList.contains(dispatcher.getIdentifier())){
             RequestMessage reqMsg = new RequestMessage();
+            reqMsg.setSourceNodeId(dispatcher.getIdentifier());
             Digest digest = gossipMessage.getDigest();
             LinkedList<Event> eventList = digest.getEventList();
 

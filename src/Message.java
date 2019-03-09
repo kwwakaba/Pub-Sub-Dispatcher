@@ -29,6 +29,11 @@ public abstract class Message implements Serializable {
 
 	public String getSourceNodeId() { return sourceNodeId; }
 
+	public void setSourceNodeId(String sourceId){
+		this.sourceNodeId = sourceId;
+	}
+
+
 	@Override
 	public String toString() {
 		return String.format("Message: description = " + description + " sourceNodeId = " + sourceNodeId);
