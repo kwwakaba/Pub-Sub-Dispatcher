@@ -75,7 +75,7 @@ public class StartGossipThread extends Thread {
             ObjectOutputStream oos = new ObjectOutputStream(baos);
             oos.writeObject(gossipMessage);
             data = baos.toByteArray();
-            DatagramSocket serverSocket = dispatcher.getSendSocket();
+            // DatagramSocket serverSocket = dispatcher.getSendSocket();
 
             for (String dispatcherID : subscriberList) {
                 // skips this dispatcher (prevents sending message to self!)
@@ -85,7 +85,7 @@ public class StartGossipThread extends Thread {
                         && data.length > 0) {
                     DatagramPacket sendMe = new DatagramPacket(data, data.length, subDispatcher.getIpAddress(), subDispatcher.getPortNumber());
                     System.out.println("About to send message to " + dispatcherID);
-                    serverSocket.send(sendMe);
+                    dispatcher.send(sendMe);
                     System.out.println("Sent message");
                 } else {
                     System.out.println("Dispatcher or data was null.");

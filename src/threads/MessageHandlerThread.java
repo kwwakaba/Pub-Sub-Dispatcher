@@ -79,8 +79,9 @@ public class MessageHandlerThread extends Thread {
             data = baos.toByteArray();
 
             packet.setData(data);
-            DatagramSocket datagramSocket = dispatcher.getSendSocket(); //new DatagramSocket();
-            datagramSocket.send(packet);
+            // DatagramSocket datagramSocket = dispatcher.getSendSocket(); //new DatagramSocket();
+            // datagramSocket.send(packet);
+            dispatcher.send(packet);
 
         } catch (Exception e){
             System.out.println("Something went wrong trying to send handleRequestMessage. " + e.getStackTrace());
@@ -149,8 +150,9 @@ public class MessageHandlerThread extends Thread {
             byte[] reqData = getDataByteArray(message);
 
             packet.setData(reqData);
-            DatagramSocket datagramSocket = dispatcher.getSendSocket();//new DatagramSocket();
-            datagramSocket.send(packet);
+            // DatagramSocket datagramSocket = dispatcher.getSendSocket();//new DatagramSocket();
+            // datagramSocket.send(packet);
+            dispatcher.send(packet);
         }catch (Exception e){
             System.out.println("Something went wrong trying to sendDispatcherMessage. " + e.getStackTrace());
         }
@@ -163,8 +165,9 @@ public class MessageHandlerThread extends Thread {
 
             //Send data
             // DatagramSocket serverSocket = new DatagramSocket(packet.getPort());
-            DatagramSocket serverSocket = dispatcher.getSendSocket();
-            serverSocket.send(new DatagramPacket(data, data.length, packet.getAddress(), packet.getPort()));
+            // DatagramSocket serverSocket = dispatcher.getSendSocket();
+            // serverSocket.send(new DatagramPacket(data, data.length, packet.getAddress(), packet.getPort()));
+            dispatcher.send(new DatagramPacket(data, data.length, packet.getAddress(), packet.getPort()));
         } catch (Exception e) {
             System.out.println("Something went wrong trying to sendMessage. " + e.getStackTrace());
         }
