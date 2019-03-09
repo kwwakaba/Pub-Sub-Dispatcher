@@ -61,17 +61,21 @@ public class MessageHandlerThread extends Thread {
         LinkedList<Event> eventCache = dispatcher.getEventCache();
         LinkedList<Event> eventResponseList = new LinkedList<>();
 
+
         byte[] data;
         for(Event event: eventList){
             if(eventCache.contains(event)){
                 eventResponseList.add(event);
             }
         }
+        EventResponseMessage responseMessage = new EventResponseMessage("", eventResponseList);
+
 
         try{
+
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             ObjectOutputStream oos = new ObjectOutputStream(baos);
-            oos.writeObject(eventResponseList);
+            oos.writeObject(responseMessage);
             data = baos.toByteArray();
 
             packet.setData(data);

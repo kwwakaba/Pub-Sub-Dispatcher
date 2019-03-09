@@ -25,4 +25,5 @@ public class EventResponseMessage extends Message implements Serializable {
     public LinkedList<Event> getEvents() {
         return events;
     }
+
 }
