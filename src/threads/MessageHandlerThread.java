@@ -115,7 +115,7 @@ public class MessageHandlerThread extends Thread {
 		// skips this dispatcher (prevents sending message to self!)
                 if (d.getIdentifier().equals(dispatcher.getIdentifier())) { continue; }
                try{
-                    byte[] data = getDataByteArray(reqMsg);
+                    byte[] data = getDataByteArray(gossipMessage);
                     // DatagramSocket serverSocket = new DatagramSocket(packet.getPort());
                     DatagramSocket serverSocket = dispatcher.getSendSocket();
                     serverSocket.send(new DatagramPacket(data, data.length, d.getIpAddress(), d.getPortNumber()));
