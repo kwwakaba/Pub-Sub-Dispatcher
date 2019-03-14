@@ -1,7 +1,7 @@
 package src.messages;
 
 import src.Message;
-
+import src.Event;
 import java.io.Serializable;
 import java.util.LinkedList;
 
@@ -13,7 +13,7 @@ import java.util.LinkedList;
 public class RequestMessage extends Message implements Serializable {
 
     /** List of events ids. **/
-	private LinkedList<String> eventList;
+	private LinkedList<Event> eventList;
 
     /**
      * Constructor.
@@ -28,7 +28,7 @@ public class RequestMessage extends Message implements Serializable {
      * Add an event to the message.
      * @param e event to add.
      */
-	public void addEvent(String e) {
+	public void addEvent(Event e) {
 		eventList.add(e);
 	}
 
@@ -36,7 +36,7 @@ public class RequestMessage extends Message implements Serializable {
      * Accessor for list in message.
      * @return list of events ids in message.
      */
-	public LinkedList<String> getEventList() {
+	public LinkedList<Event> getEventList() {
 		return eventList;
 	}
 	

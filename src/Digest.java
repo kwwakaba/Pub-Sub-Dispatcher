@@ -8,17 +8,17 @@ import java.util.LinkedList;
  */
 public class Digest implements Serializable {
 	
-	private LinkedList<String> eventList;
+	private LinkedList<Event> eventList;
 
 	public Digest() {
 		eventList = new LinkedList<>();
 	}
 
-	public void addEvent(String e) {
+	public void addEvent(Event e) {
 		eventList.add(e);
 	}
 	
-	public LinkedList<String> getEventList() {
+	public LinkedList<Event> getEventList() {
 		return eventList;
 	}
 	

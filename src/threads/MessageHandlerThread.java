@@ -95,9 +95,9 @@ public class MessageHandlerThread extends Thread {
             RequestMessage reqMsg = new RequestMessage("");
             reqMsg.setSourceNodeId(dispatcher.getIdentifier());
             Digest digest = gossipMessage.getDigest();
-            LinkedList<String> eventList = digest.getEventList();
+            LinkedList<Event> eventList = digest.getEventList();
 
-            for(String event: eventList){
+            for(Event event: eventList){
                 if(!isReceived(event)){
                     reqMsg.addEvent(event);
                 }
@@ -207,12 +207,12 @@ public class MessageHandlerThread extends Thread {
     }
 
     /**  returns true if the dispatcher received an event with the given id **/
-    public boolean isReceived(String id) throws InterruptedException{
+    public boolean isReceived(Event id) throws InterruptedException{
         LinkedList<Event> eventCache = dispatcher.getEventCache(); // Will Fix
 
         if(eventCache.size() > 0){
             for(Event event: eventCache){
-                if(event.getIdentifier() == id){
+                if(event.equals(id)) {
                     return true;
                 }
             }
