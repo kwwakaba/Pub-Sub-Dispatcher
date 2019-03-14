@@ -15,8 +15,10 @@ import java.util.concurrent.TimeUnit;
 
 public class Dispatcher {
 
-	// MARK: - Instance Variable
+	// Mutex for controlling event cache
 	private static Semaphore mutex = new Semaphore(1);
+
+	//Mutex for controlling the send socket used by messageHandlerThread and StartGossipThread.
 	private static Semaphore socketMutex = new Semaphore(1);
 
 	private String identifier;
@@ -49,11 +51,6 @@ public class Dispatcher {
         subscriptionTable.put("Pattern 2", new HashSet(Arrays.asList("2", "3")));
         subscriptionTable.put("Pattern 3", new HashSet(Arrays.asList("1", "2")));
         subscriptionTable.put("Pattern 4", new HashSet(Arrays.asList("3", "2")));
-        /*subscriptionTable.put("Pattern 5", new HashSet(Arrays.asList("1", "2", "3")));
-        subscriptionTable.put("Pattern 6", new HashSet());
-        subscriptionTable.put("Pattern 7", new HashSet(Arrays.asList("1", "2")));
-        subscriptionTable.put("Pattern 8", new HashSet(Arrays.asList("1", "3")));
-        subscriptionTable.put("Pattern 9", new HashSet(Arrays.asList("3", "2")));*/
     }
 
 	/** Event cache needs to be protected by a mutex, since multiple threads will be reading/writing to the cache.*/
@@ -162,6 +159,7 @@ public class Dispatcher {
         eventGeneratorThread.setup(dispatcher);
         eventGeneratorThread.start();
 
+        // Starts the socket listener thread.
         SocketListenerThread socketListenerThread = new SocketListenerThread();
         socketListenerThread.setup(dispatcher);
         socketListenerThread.start();

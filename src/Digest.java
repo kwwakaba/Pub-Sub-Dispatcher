@@ -3,25 +3,22 @@ package src;
 import java.io.Serializable;
 import java.util.LinkedList;
 
+/**
+ * Container for eventsIds that go in a gossip message.
+ */
 public class Digest implements Serializable {
 	
-	// MARK: - Instance Variables
-	
-	private LinkedList<Event> eventList;
-	
-	// MARK: - Constructor
-	
+	private LinkedList<String> eventList;
+
 	public Digest() {
 		eventList = new LinkedList<>();
 	}
-	
-	// MARK: - Instance Methods
-	
-	public void addEvent(Event e) {
+
+	public void addEvent(String e) {
 		eventList.add(e);
 	}
 	
-	public LinkedList<Event> getEventList() {
+	public LinkedList<String> getEventList() {
 		return eventList;
 	}
 	

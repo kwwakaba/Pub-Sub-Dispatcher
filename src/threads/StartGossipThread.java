@@ -22,6 +22,7 @@ public class StartGossipThread extends Thread {
     // stores identifier of the Dispatcher that started this Thread
     private Dispatcher dispatcher;
 
+    // setup thread
     public void setup(Dispatcher dispatcher) {
         this.dispatcher = dispatcher;
     }

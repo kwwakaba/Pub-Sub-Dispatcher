@@ -1,39 +1,42 @@
 package src.messages;
 
-import src.Event;
 import src.Message;
 
 import java.io.Serializable;
 import java.util.LinkedList;
 
-
+/**
+ * This class is the Message object for RequestMessage.
+ *
+ * A request message contains a list of events requested by the distributor.
+ */
 public class RequestMessage extends Message implements Serializable {
-	
-	// MARK: - Instance Variables
-	
-	private LinkedList<Event> eventList;
-	
-	// MARK: - Constructors
-	
-	public RequestMessage() {
-		super("");
-		
-		eventList = new LinkedList<>();
-	}
-	
+
+    /** List of events ids. **/
+	private LinkedList<String> eventList;
+
+    /**
+     * Constructor.
+     */
 	public RequestMessage(String description) {
 		super(description);
 		
 		eventList = new LinkedList<>();
 	}
-	
-	// MARK: - Instance Methods
-	
-	public void addEvent(Event e) {
+
+    /**
+     * Add an event to the message.
+     * @param e event to add.
+     */
+	public void addEvent(String e) {
 		eventList.add(e);
 	}
-	
-	public LinkedList<Event> getEventList() {
+
+    /**
+     * Accessor for list in message.
+     * @return list of events ids in message.
+     */
+	public LinkedList<String> getEventList() {
 		return eventList;
 	}
 	

@@ -16,16 +16,16 @@ import java.net.DatagramSocket;
  */
 public class SocketListenerThread extends Thread {
 
+    // stores identifier of the Dispatcher that started this Thread
     Dispatcher dispatcher;
 
+    // setup thread
     public void setup(Dispatcher dispatcher) {
         this.dispatcher = dispatcher;
     }
 
     public void run() {
         try {
-            //Open the socket and listen for messsages.
-            // https://systembash.com/a-simple-java-udp-server-and-udp-client/
             System.out.println("Socket Listener Thread started. \n");
             System.out.println("SocketListenerThread: Listening to socket at port " + dispatcher.getPortNumber()
                 + "for dispatcher " + dispatcher.getIdentifier());

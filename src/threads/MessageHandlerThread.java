@@ -70,7 +70,6 @@ public class MessageHandlerThread extends Thread {
         }
         EventResponseMessage responseMessage = new EventResponseMessage("", eventResponseList);
 
-
         try{
 
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -79,8 +78,6 @@ public class MessageHandlerThread extends Thread {
             data = baos.toByteArray();
 
             packet.setData(data);
-            // DatagramSocket datagramSocket = dispatcher.getSendSocket(); //new DatagramSocket();
-            // datagramSocket.send(packet);
             dispatcher.send(packet);
 
         } catch (Exception e){
@@ -95,13 +92,13 @@ public class MessageHandlerThread extends Thread {
 
         //Checking to see if self is subscribed to pattern
         if(dispatcherList.contains(dispatcher.getIdentifier())){
-            RequestMessage reqMsg = new RequestMessage();
+            RequestMessage reqMsg = new RequestMessage("");
             reqMsg.setSourceNodeId(dispatcher.getIdentifier());
             Digest digest = gossipMessage.getDigest();
-            LinkedList<Event> eventList = digest.getEventList();
+            LinkedList<String> eventList = digest.getEventList();
 
-            for(Event event: eventList){
-                if(!isReceived(event.getIdentifier())){
+            for(String event: eventList){
+                if(!isReceived(event)){
                     reqMsg.addEvent(event);
                 }
             }

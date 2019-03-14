@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 /**
  *  A thread that simulates receiving notifications of a certain event type
- *  by putting events in to the cache at random times.
+ *  by putting events in to the distributor's eventCache at random times.
  *
  */
 public class EventGeneratorThread extends Thread {
@@ -28,11 +28,13 @@ public class EventGeneratorThread extends Thread {
 	// predefined set of possible patterns (this may be needed in other Threads/Classes as well!)
 	ArrayList<String> possiblePatterns;
 
+	// setup thread
 	public void setup(Dispatcher dispatcher) {
 		this.dispatcher = dispatcher;
 		initializePossiblePatterns();
 	}
 
+	// initialize the patterns of the messages
 	private void initializePossiblePatterns() {
 		possiblePatterns = new ArrayList<>();
 		for (int i = 0; i < NUM_PATTERNS; i++) {

@@ -2,30 +2,33 @@ package src;
 
 import java.io.Serializable;
 
+/**
+ * Events that are propagated throughout the gossip network.
+ */
 public class Event implements Serializable {
 	
-	// MARK: - Instance Variables
-	
-	private String identifier, description, pattern;
-	
-	// MARK: - Constructor
-	
+	// Identifier of event
+	private String identifier;
+
+	// Description of the event.
+	private String description;
+
+	// Pattern of the event.
+	private String pattern;
+
+	// Constructor
 	public Event(String identifier, String description, String pattern) {
 		this.identifier = identifier;
 		this.description = description;
 		this.pattern = pattern;
 	}
 	
-	// MARK: - Instance Methods
-	
+	// Returns identifier of event
 	public String getIdentifier() {
 		return identifier;
 	}
-	
-	public String getDescription() {
-		return description;
-	}
 
+	// Returns pattern of event
 	public String getPattern() {
 		return pattern;
 	}
