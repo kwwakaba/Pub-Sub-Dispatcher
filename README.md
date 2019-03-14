@@ -3,10 +3,10 @@ Final Project - Pub-Sub-Dispatcher
 =========================================================
 Team Members:
 
-Vineet Joshi    W1170181   vjoshi@scu.edu
-Carlos Rivera   W0756026   crivera@scu.edu
-Ken Wakaba      W1096003   kwakaba@scu.edu
-Julie Wasiuk    W1174936   jwasiuk@scu.edu
+Vineet Joshi    W1170181    vjoshi@scu.edu
+Carlos Rivera   W0756026    crivera@scu.edu
+Ken Wakaba      W1096003    kwakaba@scu.edu
+Julie Wasiuk    W1174936    jwasiuk@scu.edu
 =========================================================
 Set-up:
 1. For running this system, you will need three different machines.
